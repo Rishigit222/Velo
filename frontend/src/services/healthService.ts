@@ -16,3 +16,4 @@ export const healthService = {
     return apiClient.get<HealthCheckResponse>("/health");
   },
 };
+

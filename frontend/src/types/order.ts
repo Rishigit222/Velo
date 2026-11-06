@@ -42,3 +42,4 @@ export interface OrderUpdateRequest {
 export interface OrderStatusUpdateRequest {
   status: OrderStatus;
 }
+

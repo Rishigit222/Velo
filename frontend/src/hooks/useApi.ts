@@ -45,3 +45,4 @@ export function useApi<T, Args extends unknown[]>(
     reset: () => setState({ data: null, error: null, isLoading: false }),
   };
 }
+

@@ -14,3 +14,4 @@ export interface HealthCheckResponse {
   environment?: string;
   timestamp?: string;
 }
+

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/hooks/useAuth";
 import { Navbar } from "@/components/ui/navbar";
+import { Footer } from "@/components/ui/footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,9 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ReturnProof — AI Digital Chain-of-Custody & Return Verification",
+  title: "ReturnProof — Every Delivery. Every Return. Every Proof.",
   description:
-    "AI-assisted digital chain-of-custody platform for e-commerce product delivery, unboxing, and verified returns.",
+    "AI-assisted digital chain-of-custody platform that captures, verifies, and maintains product condition evidence during delivery, unboxing, and returns.",
 };
 
 export default function RootLayout({
@@ -28,12 +29,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth`}
     >
-      <body className="min-h-full flex flex-col bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50">
+      <body className="min-h-full flex flex-col bg-white text-slate-900">
         <AuthProvider>
           <Navbar />
           <main className="flex-1">{children}</main>
+          <Footer />
         </AuthProvider>
       </body>
     </html>

@@ -44,3 +44,4 @@ export const productService = {
     return apiClient.delete<void>(`/products/${productId}`);
   },
 };
+

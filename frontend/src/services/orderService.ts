@@ -46,3 +46,4 @@ export const orderService = {
     return apiClient.patch<Order>(`/orders/${orderId}/status`, payload);
   },
 };
+

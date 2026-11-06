@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline" | "destructive" | "ghost";
+  variant?: "primary" | "secondary" | "outline" | "destructive" | "ghost" | "navy";
   size?: "sm" | "md" | "lg";
   isLoading?: boolean;
 }
@@ -22,25 +22,27 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      "inline-flex items-center justify-center font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none select-none";
+      "inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none select-none active:scale-[0.98]";
 
     const variantStyles = {
       primary:
-        "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500 shadow-sm",
+        "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500 shadow-sm hover:shadow-md hover:shadow-blue-600/20",
+      navy:
+        "bg-slate-900 text-white hover:bg-slate-800 focus:ring-slate-700 shadow-sm hover:shadow",
       secondary:
-        "bg-zinc-100 text-zinc-900 hover:bg-zinc-200 focus:ring-zinc-400 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700",
+        "bg-slate-100 text-slate-900 hover:bg-slate-200 focus:ring-slate-300",
       outline:
-        "border border-zinc-300 bg-transparent hover:bg-zinc-50 text-zinc-900 focus:ring-blue-500 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-800",
+        "border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 focus:ring-blue-500 shadow-xs",
       destructive:
-        "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 shadow-sm",
+        "bg-rose-600 text-white hover:bg-rose-700 focus:ring-rose-500 shadow-sm",
       ghost:
-        "bg-transparent hover:bg-zinc-100 text-zinc-700 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100",
+        "bg-transparent hover:bg-slate-100 text-slate-700 hover:text-slate-900",
     };
 
     const sizeStyles = {
-      sm: "h-8 px-3 text-xs gap-1.5",
-      md: "h-10 px-4 text-sm gap-2",
-      lg: "h-12 px-6 text-base gap-2.5",
+      sm: "h-9 px-3.5 text-xs gap-1.5",
+      md: "h-11 px-5 text-sm gap-2",
+      lg: "h-13 px-7 text-base gap-2.5",
     };
 
     return (

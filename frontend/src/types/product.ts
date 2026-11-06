@@ -35,3 +35,4 @@ export interface ProductListFilter {
   skip?: number;
   limit?: number;
 }
+

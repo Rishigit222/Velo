@@ -1,15 +1,28 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: "default" | "light-gray" | "interactive";
+}
+
 export function Card({
   className,
+  variant = "light-gray",
   children,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+}: CardProps) {
+  const variantStyles = {
+    default: "bg-white border-slate-200/90 shadow-xs",
+    "light-gray": "bg-slate-50/80 border-slate-200/80 shadow-xs",
+    interactive:
+      "bg-white border-slate-200 hover:border-blue-400 hover:shadow-md transition-all duration-200",
+  };
+
   return (
     <div
       className={cn(
-        "rounded-xl border border-zinc-200 bg-white text-zinc-950 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50",
+        "rounded-2xl border text-slate-900 transition-colors",
+        variantStyles[variant],
         className
       )}
       {...props}
@@ -42,7 +55,7 @@ export function CardTitle({
   return (
     <h3
       className={cn(
-        "text-lg font-semibold leading-none tracking-tight text-zinc-900 dark:text-zinc-50",
+        "text-lg font-bold leading-snug tracking-tight text-slate-900",
         className
       )}
       {...props}
@@ -59,7 +72,7 @@ export function CardDescription({
 }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
     <p
-      className={cn("text-sm text-zinc-500 dark:text-zinc-400", className)}
+      className={cn("text-sm text-slate-600 leading-relaxed", className)}
       {...props}
     >
       {children}

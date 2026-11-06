@@ -68,3 +68,4 @@ export interface AuditLog {
   current_hash: string;
   created_at: string;
 }
+
