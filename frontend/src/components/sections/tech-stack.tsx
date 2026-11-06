@@ -52,7 +52,7 @@ export function TechStack() {
 
   return (
     <section id="tech-stack" className="w-full py-20 lg:py-28 bg-slate-50/60 border-t border-slate-200/80">
-      <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 space-y-16 lg:space-y-20">
+      <div className="site-container space-y-16 lg:space-y-20">
         <SectionHeading
           badge="Enterprise Engineering"
           badgeVariant="info"

@@ -18,19 +18,19 @@ export function CtaSection() {
 
   return (
     <section id="get-started" className="w-full py-20 lg:py-28 bg-white border-t border-slate-200/80 relative overflow-hidden bg-grid-pattern">
-      <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
-        <div className="rounded-3xl border border-slate-200/90 bg-gradient-to-b from-slate-50/70 via-white to-slate-50/40 p-8 sm:p-14 lg:p-20 shadow-xl shadow-slate-200/50 text-center space-y-8 max-w-6xl mx-auto">
+      <div className="site-container">
+        <div className="rounded-3xl border border-slate-200/90 bg-gradient-to-b from-slate-50/70 via-white to-slate-50/40 p-8 sm:p-14 lg:p-20 shadow-xl shadow-slate-200/50 text-center space-y-8 w-full mx-auto">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold border border-blue-200">
             <ShieldCheck className="h-4 w-4" />
             <span>Deploy ReturnProof Chain of Custody Today</span>
           </div>
 
-          <div className="space-y-4 max-w-3xl mx-auto">
+          <div className="space-y-4 max-w-4xl mx-auto">
             <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">
               Stop E-Commerce Return Fraud <br />
               <span className="text-blue-600">With Mathematical Certainty</span>
             </h2>
-            <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-slate-600 max-w-3xl mx-auto">
               Integrate ReturnProof into your fulfillment, customer unboxing, and return logistics.
               Protect genuine customers and eliminate counterfeit swap abuse.
             </p>

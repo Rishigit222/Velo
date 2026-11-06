@@ -25,11 +25,11 @@ export function Hero() {
 
   return (
     <section className="relative w-full overflow-hidden pt-8 pb-16 md:pt-14 md:pb-24 lg:pt-16 lg:pb-28 bg-white bg-ambient-glow bg-grid-pattern">
-      <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
+      <div className="site-container">
         {/* Main Responsive Grid: 2-Column on LG/XL displays, stacked on Mobile/Tablet */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 xl:gap-14 2xl:gap-20 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 xl:gap-12 2xl:gap-16 items-center">
           {/* Left Column: Headline, Description & Call To Action */}
-          <div className="lg:col-span-5 xl:col-span-5 flex flex-col space-y-6 text-left">
+          <div className="lg:col-span-5 flex flex-col space-y-6 text-left">
             {/* Top Pill Announcement */}
             <div>
               <a
@@ -52,7 +52,7 @@ export function Hero() {
             </h1>
 
             {/* Product Description */}
-            <p className="text-base sm:text-lg text-slate-600 font-normal leading-relaxed max-w-xl">
+            <p className="text-base sm:text-lg text-slate-600 font-normal leading-relaxed">
               ReturnProof is a digital chain-of-custody platform that captures,
               verifies and maintains product condition evidence during delivery,
               unboxing and returns.
@@ -60,7 +60,7 @@ export function Hero() {
 
             {/* Email Form & CTA Buttons */}
             <div className="space-y-3 pt-2">
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 max-w-md">
+              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2.5 max-w-lg">
                 <input
                   type="email"
                   value={email}
@@ -110,7 +110,7 @@ export function Hero() {
           </div>
 
           {/* Right Column: Full-Width Product Dashboard Preview */}
-          <div className="lg:col-span-7 xl:col-span-7 w-full">
+          <div className="lg:col-span-7 w-full">
             <div className="relative w-full">
               {/* Soft Ambient Mesh Backdrop Behind Dashboard */}
               <div className="absolute -inset-2 rounded-3xl bg-gradient-to-tr from-blue-500/15 via-indigo-500/10 to-emerald-500/15 blur-2xl opacity-75 pointer-events-none" />
@@ -202,7 +202,7 @@ export function Hero() {
                       </div>
 
                       {/* Simulated Inspection Frame */}
-                      <div className="relative rounded-lg border border-slate-300 bg-slate-900 text-white h-52 sm:h-60 flex flex-col items-center justify-center overflow-hidden">
+                      <div className="relative rounded-lg border border-slate-300 bg-slate-900 text-white h-56 sm:h-64 flex flex-col items-center justify-center overflow-hidden">
                         {/* Overlay diagnostics */}
                         <div className="absolute inset-4 border border-dashed border-white/30 rounded pointer-events-none" />
                         <div className="absolute top-3 left-3 flex items-center gap-2 px-2.5 py-1 rounded bg-black/60 backdrop-blur-xs text-[10px] font-mono text-emerald-400 border border-emerald-500/30">

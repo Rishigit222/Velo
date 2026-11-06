@@ -42,8 +42,8 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-200/80 bg-white/95 backdrop-blur-md">
-      <div className="w-full max-w-[1720px] mx-auto flex h-20 items-center justify-between px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
-        {/* Brand Logo - Left Aligned */}
+      <div className="site-header-container flex h-20 items-center justify-between">
+        {/* Brand Logo - Aligned to Left */}
         <Link href="/" className="flex items-center gap-3 group shrink-0">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm shadow-blue-500/25 transition-transform duration-200 group-hover:scale-105">
             <ShieldCheck className="h-6 w-6" />
@@ -58,8 +58,8 @@ export function Navbar() {
           </div>
         </Link>
 
-        {/* Desktop Navigation Links - Center Aligned */}
-        <nav className="hidden lg:flex items-center gap-8 xl:gap-10">
+        {/* Desktop Navigation Links - Distributed across Center */}
+        <nav className="hidden lg:flex items-center gap-8 xl:gap-12">
           {navLinks.map((link) => (
             <a
               key={link.name}
@@ -80,7 +80,7 @@ export function Navbar() {
           </a>
         </nav>
 
-        {/* Right CTA Actions - Right Aligned */}
+        {/* Right CTA Actions - Aligned to Right */}
         <div className="hidden sm:flex items-center gap-4 shrink-0">
           {/* Live Status indicator */}
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100/90 text-xs text-slate-600 border border-slate-200/60">

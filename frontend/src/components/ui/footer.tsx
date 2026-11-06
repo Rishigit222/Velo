@@ -5,7 +5,7 @@ import { ShieldCheck, Lock, Database, Code2, ExternalLink } from "lucide-react";
 export function Footer() {
   return (
     <footer className="w-full border-t border-slate-200 bg-slate-50/70 text-slate-600">
-      <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 py-16 lg:py-20">
+      <div className="site-container py-16 lg:py-20">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-10 xl:gap-14">
           {/* Brand Column */}
           <div className="md:col-span-2 space-y-4">

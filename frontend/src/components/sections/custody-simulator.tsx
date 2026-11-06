@@ -70,7 +70,7 @@ export function CustodySimulator() {
 
   return (
     <section id="verification" className="w-full py-20 lg:py-28 bg-white border-t border-slate-200/80">
-      <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 space-y-16 lg:space-y-20">
+      <div className="site-container space-y-16 lg:space-y-20">
         <SectionHeading
           badge="Interactive Verification Engine"
           badgeVariant="success"
@@ -78,7 +78,7 @@ export function CustodySimulator() {
           description="Test ReturnProof's dual-frame computer vision and cryptographic hash checking against common return fraud patterns."
         />
 
-        <div className="w-full max-w-[1520px] mx-auto space-y-6">
+        <div className="w-full space-y-6">
           {/* Scenario Selector Tabs */}
           <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 rounded-xl bg-slate-100 border border-slate-200 max-w-2xl mx-auto">
             {scenarios.map((s) => (
