@@ -2,15 +2,19 @@
 Order model representing purchase transactions between buyers and sellers.
 """
 from datetime import datetime, timezone
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, List, Optional
 from sqlalchemy import DateTime, ForeignKey, Integer, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from backend.app.database.base import Base
 
 if TYPE_CHECKING:
+    from backend.app.models.audit_log import AuditLog
+    from backend.app.models.dispute import Dispute
+    from backend.app.models.evidence_session import EvidenceSession
     from backend.app.models.product import Product
     from backend.app.models.user import User
+    from backend.app.models.verification_result import VerificationResult
 
 
 class Order(Base):
@@ -69,6 +73,25 @@ class Order(Base):
         "Product",
         back_populates="orders",
         foreign_keys=[product_id],
+    )
+    evidence_sessions: Mapped[List["EvidenceSession"]] = relationship(
+        "EvidenceSession",
+        back_populates="order",
+        cascade="all, delete-orphan",
+    )
+    verification_results: Mapped[List["VerificationResult"]] = relationship(
+        "VerificationResult",
+        back_populates="order",
+        cascade="all, delete-orphan",
+    )
+    disputes: Mapped[List["Dispute"]] = relationship(
+        "Dispute",
+        back_populates="order",
+        cascade="all, delete-orphan",
+    )
+    audit_logs: Mapped[List["AuditLog"]] = relationship(
+        "AuditLog",
+        back_populates="order",
     )
 
     def __repr__(self) -> str:

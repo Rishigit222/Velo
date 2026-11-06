@@ -9,6 +9,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from backend.app.database.base import Base
 
 if TYPE_CHECKING:
+    from backend.app.models.audit_log import AuditLog
+    from backend.app.models.dispute import Dispute
+    from backend.app.models.evidence_session import EvidenceSession
     from backend.app.models.order import Order
 
 
@@ -38,6 +41,21 @@ class User(Base):
         "Order",
         back_populates="seller",
         foreign_keys="Order.seller_id",
+    )
+    evidence_sessions: Mapped[List["EvidenceSession"]] = relationship(
+        "EvidenceSession",
+        back_populates="creator",
+        foreign_keys="EvidenceSession.created_by",
+    )
+    disputes: Mapped[List["Dispute"]] = relationship(
+        "Dispute",
+        back_populates="claimant",
+        foreign_keys="Dispute.raised_by",
+    )
+    audit_logs: Mapped[List["AuditLog"]] = relationship(
+        "AuditLog",
+        back_populates="user",
+        foreign_keys="AuditLog.user_id",
     )
 
     def __repr__(self) -> str:
