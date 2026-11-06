@@ -188,3 +188,4 @@ def test_delete_product_permissions_and_safety(client: TestClient, test_seller: 
 
     # Verify 404 on subsequent get
     assert client.get(f"/api/v1/products/{p2_id}", headers=test_buyer["headers"]).status_code == 404
+

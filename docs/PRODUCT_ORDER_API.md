@@ -370,3 +370,4 @@ All error payloads follow FastAPI's standard format:
 | `403 Forbidden` | Permission denied | Buyer trying to create products; seller attempting to modify another seller's product/order. |
 | `404 Not Found` | Resource missing | Product or order ID does not exist. |
 | `422 Unprocessable Entity` | Schema validation error | Negative price, zero or negative order quantity, invalid email format. |
+

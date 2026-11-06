@@ -104,3 +104,4 @@ def delete_single_product(
     """Delete a product when safe and permitted."""
     delete_product(db=db, product_id=product_id, current_user=current_user)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+

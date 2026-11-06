@@ -205,3 +205,4 @@ def delete_product(db: Session, product_id: int, current_user: User) -> None:
 
     db.delete(product)
     db.commit()
+
