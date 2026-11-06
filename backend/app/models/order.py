@@ -3,7 +3,7 @@ Order model representing purchase transactions between buyers and sellers.
 """
 from datetime import datetime, timezone
 from typing import TYPE_CHECKING, List, Optional
-from sqlalchemy import DateTime, ForeignKey, Integer, String, func
+from sqlalchemy import DateTime, Float, ForeignKey, Integer, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from backend.app.database.base import Base
@@ -40,6 +40,10 @@ class Order(Base):
         nullable=True,
         index=True,
     )
+    quantity: Mapped[int] = mapped_column(Integer, default=1, server_default="1", nullable=False)
+    total_amount: Mapped[float] = mapped_column(Float, default=0.0, server_default="0.0", nullable=False)
+    tracking_number: Mapped[Optional[str]] = mapped_column(String(100), index=True, nullable=True)
+    delivery_date: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
     order_date: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc),
@@ -55,6 +59,13 @@ class Order(Base):
         DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc),
         server_default=func.now(),
+        nullable=False,
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        server_default=func.now(),
+        onupdate=lambda: datetime.now(timezone.utc),
         nullable=False,
     )
 
@@ -96,4 +107,3 @@ class Order(Base):
 
     def __repr__(self) -> str:
         return f"<Order id={self.id} number='{self.order_number}' status='{self.status}'>"
-

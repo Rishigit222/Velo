@@ -54,3 +54,4 @@ class EvidenceFile(Base):
 
     def __repr__(self) -> str:
         return f"<EvidenceFile id={self.id} session_id={self.session_id} name='{self.file_name}' hash='{self.file_hash[:8]}...'>"
+

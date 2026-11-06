@@ -66,3 +66,4 @@ class AuditLog(Base):
 
     def __repr__(self) -> str:
         return f"<AuditLog id={self.id} event='{self.event_type}' hash='{self.current_hash[:8]}...'>"
+

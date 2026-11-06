@@ -9,12 +9,13 @@ from backend.app.database.connection import get_db
 from backend.app.models.order import Order
 from backend.app.models.user import User
 from backend.app.routes.deps import get_current_user
-from backend.app.schemas.order import OrderCreate, OrderResponse, OrderUpdate
+from backend.app.schemas.order import OrderCreate, OrderResponse, OrderStatusUpdate, OrderUpdate
 from backend.app.services.order_service import (
     create_order,
     get_order_for_user,
     list_orders,
     update_order_for_user,
+    update_order_status_for_user,
 )
 
 router = APIRouter(prefix="/orders", tags=["Orders"])
@@ -85,3 +86,23 @@ def update_order(
         current_user=current_user,
     )
 
+
+@router.patch(
+    "/{order_id}/status",
+    response_model=OrderResponse,
+    summary="Update order status",
+    description="Dedicated endpoint to update the lifecycle status of an order. Role restrictions apply.",
+)
+def update_order_status(
+    order_id: int,
+    status_update: OrderStatusUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> Order:
+    """Update order status with RBAC transition validation."""
+    return update_order_status_for_user(
+        db=db,
+        order_id=order_id,
+        new_status=status_update.status,
+        current_user=current_user,
+    )

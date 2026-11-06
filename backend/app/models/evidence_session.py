@@ -101,3 +101,4 @@ class EvidenceSession(Base):
 
     def __repr__(self) -> str:
         return f"<EvidenceSession id={self.id} order_id={self.order_id} type='{self.session_type}' status='{self.session_status}'>"
+

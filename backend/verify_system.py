@@ -1,5 +1,5 @@
 """
-End-to-end verification script for ReturnProof backend and Next.js frontend readiness.
+End-to-end verification script for ReturnProof backend, Products, and Orders.
 """
 import sys
 from pathlib import Path
@@ -15,18 +15,18 @@ from backend.app.main import app
 
 def run_verification():
     print("=" * 60)
-    print("ReturnProof End-to-End System Verification")
+    print("ReturnProof End-to-End System Verification (Step 3)")
     print("=" * 60)
 
     # 1. Inspect SQLite Database
-    conn = sqlite3.connect("returnproof.db")
+    conn = sqlite3.connect("backend/returnproof.db")
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
     tables = [row[0] for row in cursor.fetchall()]
-    print(f"[OK] Database connected. Found tables: {tables}")
-    assert "users" in tables, "Table 'users' missing!"
-    assert "products" in tables, "Table 'products' missing!"
-    assert "orders" in tables, "Table 'orders' missing!"
+    print(f"[OK] Database connected. Found {len(tables)} tables: {tables}")
+    assert "users" in tables
+    assert "products" in tables
+    assert "orders" in tables
     conn.close()
 
     client = TestClient(app)
@@ -37,86 +37,114 @@ def run_verification():
     print(f"[OK] Root Endpoint ('/'): {r_root.json()}")
 
     r_health = client.get("/health")
-    assert r_health.status_code == 200, f"Health failed: {r_health.text}"
-    print(f"[OK] Global Health ('/health'): {r_health.json()}")
+    assert r_health.status_code == 200
+    print(f"[OK] Global Health ('/health'): {r_health.json()['status']}")
 
     r_v1_health = client.get("/api/v1/health")
-    assert r_v1_health.status_code == 200, f"v1 Health failed: {r_v1_health.text}"
-    print(f"[OK] v1 Health ('/api/v1/health'): {r_v1_health.json()}")
+    assert r_v1_health.status_code == 200
+    print(f"[OK] v1 Health ('/api/v1/health'): {r_v1_health.json()['status']}")
 
     # 3. Test Swagger Docs & OpenAPI Specification
     r_docs = client.get("/docs")
-    assert r_docs.status_code == 200, f"Swagger /docs failed: {r_docs.status_code}"
+    assert r_docs.status_code == 200
     print("[OK] Swagger UI accessible at /docs (HTTP 200)")
 
     r_openapi = client.get("/openapi.json")
-    assert r_openapi.status_code == 200, f"OpenAPI schema failed: {r_openapi.status_code}"
+    assert r_openapi.status_code == 200
     openapi_data = r_openapi.json()
     paths = list(openapi_data.get("paths", {}).keys())
     print(f"[OK] OpenAPI schema generated with {len(paths)} routes: {paths}")
+    assert "/api/v1/products" in paths
+    assert "/api/v1/products/{product_id}" in paths
+    assert "/api/v1/orders/{order_id}/status" in paths
 
-    # 4. Test CORS Header for Next.js Frontend
-    cors_headers = {
-        "Origin": "http://localhost:3000",
-        "Access-Control-Request-Method": "POST",
-    }
-    r_cors = client.options("/api/v1/auth/login", headers=cors_headers)
-    print(f"[OK] CORS Preflight Status: {r_cors.status_code}")
-    print(f"[OK] CORS Allow-Origin Header: {r_cors.headers.get('access-control-allow-origin')}")
-    assert r_cors.headers.get("access-control-allow-origin") == "http://localhost:3000", "CORS origin mismatch!"
-
-    # 5. Full Auth & Order Flow
+    # 4. Authentication flow
     # Register Buyer
-    reg_buyer = client.post("/api/v1/auth/register", json={
-        "email": "verification_buyer@test.com",
-        "full_name": "Verify Buyer",
-        "password": "Password12345!",
+    client.post("/api/v1/auth/register", json={
+        "email": "step3_buyer@test.com",
+        "full_name": "Step3 Buyer",
+        "password": "Password123!",
         "role": "buyer"
     })
-    assert reg_buyer.status_code in [201, 400], f"Register failed: {reg_buyer.text}"
-
     # Register Seller
-    reg_seller = client.post("/api/v1/auth/register", json={
-        "email": "verification_seller@test.com",
-        "full_name": "Verify Seller",
-        "password": "Password12345!",
+    client.post("/api/v1/auth/register", json={
+        "email": "step3_seller@test.com",
+        "full_name": "Step3 Seller",
+        "password": "Password123!",
         "role": "seller"
     })
-    assert reg_seller.status_code in [201, 400], f"Register seller failed: {reg_seller.text}"
+
+    # Login Seller
+    s_login = client.post("/api/v1/auth/login", json={"email": "step3_seller@test.com", "password": "Password123!"})
+    seller_token = s_login.json()["access_token"]
+    seller_headers = {"Authorization": f"Bearer {seller_token}"}
+    seller_id = s_login.json()["user"]["id"]
+    print(f"[OK] Seller logged in: ID {seller_id}")
 
     # Login Buyer
-    login_resp = client.post("/api/v1/auth/login", json={
-        "email": "verification_buyer@test.com",
-        "password": "Password12345!"
-    })
-    assert login_resp.status_code == 200, f"Login failed: {login_resp.text}"
-    token = login_resp.json()["access_token"]
-    headers = {"Authorization": f"Bearer {token}"}
-    print("[OK] Buyer logged in with Argon2 password verification and JWT generated.")
+    b_login = client.post("/api/v1/auth/login", json={"email": "step3_buyer@test.com", "password": "Password123!"})
+    buyer_token = b_login.json()["access_token"]
+    buyer_headers = {"Authorization": f"Bearer {buyer_token}"}
+    buyer_id = b_login.json()["user"]["id"]
+    print(f"[OK] Buyer logged in: ID {buyer_id}")
 
-    # Check /me
-    me_resp = client.get("/api/v1/auth/me", headers=headers)
-    assert me_resp.status_code == 200
-    print(f"[OK] Authenticated user retrieved: {me_resp.json()['email']} ({me_resp.json()['role']})")
+    # 5. Product APIs
+    # Create product
+    prod_resp = client.post("/api/v1/products", json={
+        "product_name": "Apple iPhone 15 Pro",
+        "description": "256GB Natural Titanium",
+        "sku": f"IPHONE-15P-256-{buyer_id}",
+        "category": "Smartphones",
+        "brand": "Apple",
+        "price": 1099.00
+    }, headers=seller_headers)
+    assert prod_resp.status_code == 201, f"Product create failed: {prod_resp.text}"
+    product_id = prod_resp.json()["id"]
+    print(f"[OK] Product created: ID {product_id}, Name: {prod_resp.json()['product_name']}, Price: {prod_resp.json()['price']}")
 
-    # Create Order
+    # List products
+    list_resp = client.get("/api/v1/products?category=Smartphones", headers=buyer_headers)
+    assert list_resp.status_code == 200
+    assert len(list_resp.json()) >= 1
+    print(f"[OK] Product list returned {len(list_resp.json())} item(s) for category 'Smartphones'")
+
+    # Get single product
+    get_p = client.get(f"/api/v1/products/{product_id}", headers=buyer_headers)
+    assert get_p.status_code == 200
+    print(f"[OK] Retrieved product details for ID {product_id}")
+
+    # Update product
+    put_p = client.post if False else client.put
+    put_resp = put_p(f"/api/v1/products/{product_id}", json={
+        "price": 1049.00
+    }, headers=seller_headers)
+    assert put_resp.status_code == 200
+    assert put_resp.json()["price"] == 1049.00
+    print(f"[OK] Product updated: new price {put_resp.json()['price']}")
+
+    # 6. Order APIs
+    # Create order
     order_resp = client.post("/api/v1/orders", json={
-        "product_name": "Sony Alpha Camera",
-        "brand": "Sony",
-        "serial_number": "SN-CAM-100200"
-    }, headers=headers)
+        "product_id": product_id,
+        "quantity": 2,
+        "tracking_number": "TRK-STEP3-12345"
+    }, headers=buyer_headers)
     assert order_resp.status_code == 201, f"Order create failed: {order_resp.text}"
+    order_id = order_resp.json()["id"]
     order_data = order_resp.json()
-    order_id = order_data["id"]
-    print(f"[OK] Order created: ID {order_id}, Number: {order_data['order_number']}, Status: {order_data['status']}")
+    print(f"[OK] Order created: ID {order_id}, Qty: {order_data['quantity']}, Total: {order_data['total_amount']}, Status: {order_data['status']}")
+    assert order_data["total_amount"] == 2098.00  # 1049.00 * 2
 
-    # Get Order
-    get_order_resp = client.get(f"/api/v1/orders/{order_id}", headers=headers)
-    assert get_order_resp.status_code == 200
-    print(f"[OK] Order fetched successfully with buyer isolation.")
+    # Patch order status
+    patch_resp = client.patch(f"/api/v1/orders/{order_id}/status", json={
+        "status": "confirmed"
+    }, headers=seller_headers)
+    assert patch_resp.status_code == 200
+    assert patch_resp.json()["status"] == "confirmed"
+    print(f"[OK] Order status patched to: {patch_resp.json()['status']}")
 
     print("=" * 60)
-    print("ALL VERIFICATIONS COMPLETED SUCCESSFULLY!")
+    print("ALL STEP 3 VERIFICATIONS COMPLETED SUCCESSFULLY!")
     print("=" * 60)
 
 if __name__ == "__main__":

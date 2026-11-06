@@ -323,3 +323,4 @@ To migrate to Azure SQL Database:
    alembic upgrade head
    ```
 Alembic will automatically construct all 9 tables, indexes, and foreign keys on Azure SQL without manual DDL scripting.
+

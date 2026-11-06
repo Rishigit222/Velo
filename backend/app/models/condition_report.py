@@ -42,3 +42,4 @@ class ConditionReport(Base):
 
     def __repr__(self) -> str:
         return f"<ConditionReport id={self.id} session_id={self.session_id} condition='{self.product_condition}'>"
+

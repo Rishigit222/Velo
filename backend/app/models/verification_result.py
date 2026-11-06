@@ -67,3 +67,4 @@ class VerificationResult(Base):
 
     def __repr__(self) -> str:
         return f"<VerificationResult id={self.id} order_id={self.order_id} status='{self.overall_status}' confidence={self.confidence_score}>"
+

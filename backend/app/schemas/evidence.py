@@ -153,3 +153,4 @@ class AuditLogResponse(AuditLogBase):
 
     id: int
     created_at: datetime
+

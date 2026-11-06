@@ -65,3 +65,4 @@ class Dispute(Base):
 
     def __repr__(self) -> str:
         return f"<Dispute id={self.id} order_id={self.order_id} status='{self.status}'>"
+

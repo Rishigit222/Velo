@@ -333,3 +333,4 @@ def test_cascade_delete_integrity(db_session: Session, sample_order: Order):
     assert db_session.execute(select(EvidenceFile).where(EvidenceFile.session_id == session_id)).scalar_one_or_none() is None
     assert db_session.execute(select(ConditionReport).where(ConditionReport.session_id == session_id)).scalar_one_or_none() is None
     assert db_session.execute(select(Dispute).where(Dispute.order_id == order_id)).scalar_one_or_none() is None
+

@@ -222,3 +222,95 @@ def test_order_update_buyer_permissions(
     assert cancel_resp.status_code == 200
     assert cancel_resp.json()["status"] == "cancelled"
 
+
+def test_order_creation_with_quantity_and_pricing(client: TestClient, test_buyer: dict, test_seller: dict):
+    """Test order creation calculates total_amount based on quantity and product price."""
+    # Create product with price 120.00
+    p_resp = client.post(
+        "/api/v1/products",
+        json={"product_name": "Mechanical Keyboard", "price": 120.00},
+        headers=test_seller["headers"],
+    )
+    product_id = p_resp.json()["id"]
+
+    # Place order with quantity 3
+    order_resp = client.post(
+        "/api/v1/orders",
+        json={
+            "product_id": product_id,
+            "quantity": 3,
+            "tracking_number": "TRK-FEDEX-9988",
+        },
+        headers=test_buyer["headers"],
+    )
+    assert order_resp.status_code == 201
+    data = order_resp.json()
+    assert data["quantity"] == 3
+    assert data["total_amount"] == 360.00
+    assert data["tracking_number"] == "TRK-FEDEX-9988"
+    assert data["seller_id"] == test_seller["user"].id
+
+
+def test_order_creation_invalid_quantity(client: TestClient, test_buyer: dict, test_seller: dict, test_product):
+    """Test creating an order with quantity 0 or negative fails validation (422)."""
+    resp = client.post(
+        "/api/v1/orders",
+        json={"product_id": test_product.id, "quantity": 0},
+        headers=test_buyer["headers"],
+    )
+    assert resp.status_code == 422
+
+
+def test_patch_order_status_lifecycle(client: TestClient, test_buyer: dict, other_buyer: dict, test_seller: dict, other_seller: dict, test_product):
+    """Test PATCH /api/v1/orders/{order_id}/status endpoint with RBAC enforcement."""
+    # 1. Buyer places order
+    order_resp = client.post(
+        "/api/v1/orders",
+        json={"product_id": test_product.id, "seller_id": test_seller["user"].id},
+        headers=test_buyer["headers"],
+    )
+    order_id = order_resp.json()["id"]
+    assert order_resp.json()["status"] == "pending"
+
+    # 2. Other seller tries to patch status -> 403 Forbidden
+    patch_forbidden = client.patch(
+        f"/api/v1/orders/{order_id}/status",
+        json={"status": "confirmed"},
+        headers=other_seller["headers"],
+    )
+    assert patch_forbidden.status_code == 403
+
+    # 3. Assigned seller confirms and ships order -> 200 OK
+    patch_confirmed = client.patch(
+        f"/api/v1/orders/{order_id}/status",
+        json={"status": "confirmed"},
+        headers=test_seller["headers"],
+    )
+    assert patch_confirmed.status_code == 200
+    assert patch_confirmed.json()["status"] == "confirmed"
+
+    patch_shipped = client.patch(
+        f"/api/v1/orders/{order_id}/status",
+        json={"status": "shipped"},
+        headers=test_seller["headers"],
+    )
+    assert patch_shipped.status_code == 200
+    assert patch_shipped.json()["status"] == "shipped"
+
+    # 4. Buyer cannot mark shipped order as confirmed or delivered -> 400 Bad Request
+    buyer_invalid = client.patch(
+        f"/api/v1/orders/{order_id}/status",
+        json={"status": "delivered"},
+        headers=test_buyer["headers"],
+    )
+    assert buyer_invalid.status_code == 400
+
+    # 5. Non-existent order -> 404 Not Found
+    nf_resp = client.patch(
+        "/api/v1/orders/99999/status",
+        json={"status": "cancelled"},
+        headers=test_buyer["headers"],
+    )
+    assert nf_resp.status_code == 404
+
+

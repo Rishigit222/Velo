@@ -27,9 +27,9 @@ def create_order(db: Session, order_in: OrderCreate, current_user: User) -> Orde
     Create a new order.
     Buyers create orders for themselves.
     Admins can specify a different buyer_id.
-    Validates seller existence, product existence/creation, and order number uniqueness.
+    Validates quantity, pricing, seller existence, product existence/creation, and order number uniqueness.
     """
-    # Determine buyer_id
+    # Determine buyer_id: only admins can set a different buyer_id
     if current_user.role == UserRole.ADMIN.value and order_in.buyer_id:
         buyer = db.execute(select(User).where(User.id == order_in.buyer_id)).scalar_one_or_none()
         if not buyer:
@@ -41,22 +41,11 @@ def create_order(db: Session, order_in: OrderCreate, current_user: User) -> Orde
     else:
         buyer_id = current_user.id
 
-    # Validate seller if provided
-    if order_in.seller_id:
-        seller = db.execute(select(User).where(User.id == order_in.seller_id)).scalar_one_or_none()
-        if not seller:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Seller with ID {order_in.seller_id} not found.",
-            )
-        if seller.role not in [UserRole.SELLER.value, UserRole.ADMIN.value]:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"User with ID {order_in.seller_id} is not a registered seller.",
-            )
-
     # Handle Product: either reference existing or create from inline payload
     product_id = order_in.product_id
+    product = None
+    seller_id = order_in.seller_id
+
     if product_id:
         product = db.execute(select(Product).where(Product.id == product_id)).scalar_one_or_none()
         if not product:
@@ -64,6 +53,9 @@ def create_order(db: Session, order_in: OrderCreate, current_user: User) -> Orde
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Product with ID {product_id} not found.",
             )
+        # If product already has an assigned seller and order didn't specify one, use product's seller
+        if product.seller_id and not seller_id:
+            seller_id = product.seller_id
     elif order_in.product_name:
         # Check if product with serial_number already exists
         if order_in.serial_number:
@@ -72,24 +64,59 @@ def create_order(db: Session, order_in: OrderCreate, current_user: User) -> Orde
             ).scalar_one_or_none()
             if existing_product:
                 product_id = existing_product.id
+                product = existing_product
             else:
                 new_product = Product(
                     product_name=order_in.product_name.strip(),
                     brand=order_in.brand.strip() if order_in.brand else None,
                     serial_number=order_in.serial_number.strip() if order_in.serial_number else None,
+                    seller_id=seller_id,
                 )
                 db.add(new_product)
                 db.flush()
                 product_id = new_product.id
+                product = new_product
         else:
             new_product = Product(
                 product_name=order_in.product_name.strip(),
                 brand=order_in.brand.strip() if order_in.brand else None,
                 serial_number=None,
+                seller_id=seller_id,
             )
             db.add(new_product)
             db.flush()
             product_id = new_product.id
+            product = new_product
+
+    # Validate seller if specified or determined
+    if seller_id:
+        seller = db.execute(select(User).where(User.id == seller_id)).scalar_one_or_none()
+        if not seller:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Seller with ID {seller_id} not found.",
+            )
+        if seller.role not in [UserRole.SELLER.value, UserRole.ADMIN.value]:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"User with ID {seller_id} is not a registered seller.",
+            )
+
+    # Validate quantity
+    quantity = order_in.quantity if order_in.quantity is not None else 1
+    if quantity <= 0:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Order quantity must be a positive integer (> 0).",
+        )
+
+    # Determine total amount
+    if order_in.total_amount is not None:
+        total_amount = float(order_in.total_amount)
+    elif product and product.price is not None:
+        total_amount = float(product.price) * quantity
+    else:
+        total_amount = 0.0
 
     # Handle order number
     order_number = order_in.order_number or generate_order_number()
@@ -105,8 +132,12 @@ def create_order(db: Session, order_in: OrderCreate, current_user: User) -> Orde
     db_order = Order(
         order_number=order_number,
         buyer_id=buyer_id,
-        seller_id=order_in.seller_id,
+        seller_id=seller_id,
         product_id=product_id,
+        quantity=quantity,
+        total_amount=total_amount,
+        tracking_number=order_in.tracking_number.strip() if order_in.tracking_number else None,
+        delivery_date=order_in.delivery_date,
         status=OrderStatus.PENDING.value,
         order_date=datetime.now(timezone.utc),
     )
@@ -147,14 +178,12 @@ def list_orders(db: Session, current_user: User) -> List[Order]:
     )
 
     if current_user.role == UserRole.ADMIN.value:
-        # Admins see all records
         pass
     elif current_user.role == UserRole.BUYER.value:
         stmt = stmt.where(Order.buyer_id == current_user.id)
     elif current_user.role == UserRole.SELLER.value:
         stmt = stmt.where(Order.seller_id == current_user.id)
     else:
-        # Fallback security check
         stmt = stmt.where(Order.buyer_id == current_user.id)
 
     stmt = stmt.order_by(Order.created_at.desc())
@@ -195,8 +224,8 @@ def update_order_for_user(
 ) -> Order:
     """
     Update an order with role-specific authorization:
-    - Admins: update status, seller_id, product_id freely.
-    - Sellers: update status on orders assigned to them.
+    - Admins: update status, seller_id, product_id, quantity, total_amount, tracking, delivery.
+    - Sellers: update status, tracking_number, delivery_date on orders assigned to them.
     - Buyers: can request return or cancel a pending order.
     """
     order = get_order_by_id_internal(db, order_id)
@@ -214,6 +243,14 @@ def update_order_for_user(
             order.seller_id = order_update.seller_id
         if order_update.product_id is not None:
             order.product_id = order_update.product_id
+        if order_update.quantity is not None:
+            order.quantity = order_update.quantity
+        if order_update.total_amount is not None:
+            order.total_amount = order_update.total_amount
+        if order_update.tracking_number is not None:
+            order.tracking_number = order_update.tracking_number.strip()
+        if order_update.delivery_date is not None:
+            order.delivery_date = order_update.delivery_date
 
     elif current_user.role == UserRole.SELLER.value:
         if order.seller_id != current_user.id:
@@ -223,10 +260,14 @@ def update_order_for_user(
             )
         if order_update.status is not None:
             order.status = order_update.status.value
-        if order_update.seller_id is not None or order_update.product_id is not None:
+        if order_update.tracking_number is not None:
+            order.tracking_number = order_update.tracking_number.strip()
+        if order_update.delivery_date is not None:
+            order.delivery_date = order_update.delivery_date
+        if order_update.seller_id is not None or order_update.product_id is not None or order_update.quantity is not None:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="Sellers cannot reassign order participants or products.",
+                detail="Sellers cannot reassign order participants, products, or quantities.",
             )
 
     elif current_user.role == UserRole.BUYER.value:
@@ -235,10 +276,15 @@ def update_order_for_user(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="You can only update your own orders.",
             )
-        if order_update.seller_id is not None or order_update.product_id is not None:
+        if (
+            order_update.seller_id is not None
+            or order_update.product_id is not None
+            or order_update.quantity is not None
+            or order_update.tracking_number is not None
+        ):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="Buyers cannot modify seller or product assignments.",
+                detail="Buyers cannot modify seller, product, quantity, or shipping tracking.",
             )
         if order_update.status is not None:
             allowed_transitions = [
@@ -262,3 +308,61 @@ def update_order_for_user(
     db.refresh(order)
     return get_order_by_id_internal(db, order.id)
 
+
+def update_order_status_for_user(
+    db: Session,
+    order_id: int,
+    new_status: OrderStatus,
+    current_user: User,
+) -> Order:
+    """
+    Dedicated endpoint logic for PATCH /api/v1/orders/{order_id}/status.
+    Enforces RBAC state transitions:
+    - Admins: can transition to any valid status.
+    - Sellers: can transition orders assigned to them (e.g. confirmed, shipped, delivered, returned).
+    - Buyers: can cancel pending orders or request return on delivered orders.
+    """
+    order = get_order_by_id_internal(db, order_id)
+    if not order:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Order with ID {order_id} not found.",
+        )
+
+    if current_user.role == UserRole.ADMIN.value:
+        order.status = new_status.value
+
+    elif current_user.role == UserRole.SELLER.value:
+        if order.seller_id != current_user.id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You can only update the status of orders assigned to you.",
+            )
+        order.status = new_status.value
+
+    elif current_user.role == UserRole.BUYER.value:
+        if order.buyer_id != current_user.id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You can only update the status of your own orders.",
+            )
+        allowed_transitions = [
+            OrderStatus.CANCELLED.value,
+            OrderStatus.RETURN_REQUESTED.value,
+        ]
+        if new_status.value not in allowed_transitions:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Buyers may only update status to 'cancelled' or 'return_requested'.",
+            )
+        order.status = new_status.value
+
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Unauthorized to update order status.",
+        )
+
+    db.commit()
+    db.refresh(order)
+    return get_order_by_id_internal(db, order.id)

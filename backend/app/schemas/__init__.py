@@ -20,8 +20,19 @@ from backend.app.schemas.evidence import (
     VerificationResultResponse,
 )
 from backend.app.schemas.health import HealthResponse, RootResponse
-from backend.app.schemas.order import OrderCreate, OrderResponse, OrderStatus, OrderUpdate
-from backend.app.schemas.product import ProductBase, ProductCreate, ProductResponse
+from backend.app.schemas.order import (
+    OrderCreate,
+    OrderResponse,
+    OrderStatus,
+    OrderStatusUpdate,
+    OrderUpdate,
+)
+from backend.app.schemas.product import (
+    ProductBase,
+    ProductCreate,
+    ProductResponse,
+    ProductUpdate,
+)
 from backend.app.schemas.user import UserBase, UserCreate, UserResponse, UserRole, UserUpdate
 
 __all__ = [
@@ -32,10 +43,12 @@ __all__ = [
     "UserResponse",
     "ProductBase",
     "ProductCreate",
+    "ProductUpdate",
     "ProductResponse",
     "OrderStatus",
     "OrderCreate",
     "OrderUpdate",
+    "OrderStatusUpdate",
     "OrderResponse",
     "LoginRequest",
     "TokenResponse",
