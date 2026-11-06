@@ -4,10 +4,7 @@ import {
   Video,
   FileCheck2,
   ArrowRight,
-  ShieldAlert,
-  Hash,
   CheckCircle2,
-  Barcode,
 } from "lucide-react";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -63,8 +60,8 @@ export function HowItWorks() {
   ];
 
   return (
-    <section id="how-it-works" className="py-24 bg-white border-t border-slate-200/80">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-16">
+    <section id="how-it-works" className="w-full py-20 lg:py-28 bg-white border-t border-slate-200/80">
+      <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 space-y-16 lg:space-y-20">
         <SectionHeading
           badge="Three-Step Workflow"
           badgeVariant="info"
@@ -72,61 +69,61 @@ export function HowItWorks() {
           description="A continuous, cryptographically sealed record guaranteeing transparency and eliminating fraudulent chargebacks for merchants and consumers alike."
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {steps.map((item, idx) => {
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 xl:gap-10 2xl:gap-12">
+          {steps.map((item) => {
             const Icon = item.icon;
             return (
               <Card
                 key={item.step}
                 variant="light-gray"
-                className="relative flex flex-col justify-between overflow-hidden border-slate-200 hover:border-blue-400 hover:shadow-lg transition-all duration-300 group"
+                className="relative flex flex-col justify-between overflow-hidden border-slate-200 hover:border-blue-400 hover:shadow-xl transition-all duration-300 group p-2"
               >
                 {/* Decorative Step Number Accent */}
-                <div className="absolute top-4 right-4 text-5xl font-black text-slate-200/60 select-none group-hover:text-blue-100 transition-colors">
+                <div className="absolute top-4 right-5 text-6xl font-black text-slate-200/50 select-none group-hover:text-blue-100 transition-colors pointer-events-none">
                   {item.step}
                 </div>
 
-                <CardHeader className="space-y-3 pb-4">
+                <CardHeader className="space-y-4 pb-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm shadow-blue-500/20 group-hover:scale-105 transition-transform">
-                      <Icon className="h-6 w-6" />
+                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-md shadow-blue-500/25 group-hover:scale-105 transition-transform">
+                      <Icon className="h-7 w-7" />
                     </div>
                     <div>
                       <Badge variant="purple" size="sm">
                         {item.badge}
                       </Badge>
-                      <h4 className="text-xs font-semibold text-slate-500 mt-1">
+                      <h4 className="text-xs font-bold text-slate-500 mt-1">
                         {item.subtitle}
                       </h4>
                     </div>
                   </div>
 
-                  <CardTitle className="text-xl pt-2 text-slate-900">
+                  <CardTitle className="text-xl sm:text-2xl pt-2 text-slate-900 leading-snug">
                     {item.title}
                   </CardTitle>
-                  <CardDescription className="text-slate-600 text-sm">
+                  <CardDescription className="text-slate-600 text-sm leading-relaxed">
                     {item.description}
                   </CardDescription>
                 </CardHeader>
 
-                <CardContent className="space-y-4 pt-0">
-                  <div className="rounded-xl bg-white border border-slate-200/90 p-4 space-y-2 text-xs">
+                <CardContent className="space-y-5 pt-0">
+                  <div className="rounded-xl bg-white border border-slate-200/90 p-4 space-y-2.5 text-xs">
                     <span className="font-bold text-slate-800 uppercase tracking-wider text-[10px]">
                       Verification Points:
                     </span>
                     {item.highlights.map((h, i) => (
                       <div key={i} className="flex items-center gap-2 text-slate-600">
-                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
-                        <span>{h}</span>
+                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                        <span className="font-medium">{h}</span>
                       </div>
                     ))}
                   </div>
 
-                  <div className="pt-2 flex items-center justify-between">
+                  <div className="pt-2 flex items-center justify-between border-t border-slate-200/70">
                     <VerificationIndicator label={item.indicator} />
-                    <span className="text-xs font-semibold text-blue-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                    <span className="text-xs font-bold text-blue-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                       <span>Protocol {item.step}</span>
-                      <ArrowRight className="h-3 w-3" />
+                      <ArrowRight className="h-3.5 w-3.5" />
                     </span>
                   </div>
                 </CardContent>

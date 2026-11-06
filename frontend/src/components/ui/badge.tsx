@@ -1,5 +1,5 @@
 import React from "react";
-import { CheckCircle2, ShieldCheck, AlertCircle } from "lucide-react";
+import { CheckCircle2, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { OrderStatus, UserRole } from "@/types";
 

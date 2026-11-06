@@ -6,16 +6,11 @@ import {
   CheckCircle2,
   XCircle,
   AlertTriangle,
-  RotateCcw,
-  Hash,
-  Eye,
-  Sliders,
   Sparkles,
 } from "lucide-react";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Badge, VerificationIndicator, TamperEvidentSeal } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { TamperEvidentSeal } from "@/components/ui/badge";
 
 interface Scenario {
   id: string;
@@ -74,8 +69,8 @@ export function CustodySimulator() {
   const active = scenarios.find((s) => s.id === selectedId) || scenarios[0];
 
   return (
-    <section id="verification" className="py-24 bg-white border-t border-slate-200/80">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-16">
+    <section id="verification" className="w-full py-20 lg:py-28 bg-white border-t border-slate-200/80">
+      <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 space-y-16 lg:space-y-20">
         <SectionHeading
           badge="Interactive Verification Engine"
           badgeVariant="success"
@@ -83,7 +78,7 @@ export function CustodySimulator() {
           description="Test ReturnProof's dual-frame computer vision and cryptographic hash checking against common return fraud patterns."
         />
 
-        <div className="mx-auto max-w-5xl space-y-6">
+        <div className="w-full max-w-[1520px] mx-auto space-y-6">
           {/* Scenario Selector Tabs */}
           <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 rounded-xl bg-slate-100 border border-slate-200 max-w-2xl mx-auto">
             {scenarios.map((s) => (
@@ -102,17 +97,17 @@ export function CustodySimulator() {
           </div>
 
           {/* Interactive Inspection Workspace Card */}
-          <Card variant="light-gray" className="border-slate-200 overflow-hidden shadow-md">
-            <div className="border-b border-slate-200 bg-slate-100/70 px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <Card variant="light-gray" className="border-slate-200 overflow-hidden shadow-xl w-full">
+            <div className="border-b border-slate-200 bg-slate-100/70 px-6 sm:px-8 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white shadow-xs">
-                  <ShieldCheck className="h-5 w-5" />
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600 text-white shadow-xs">
+                  <ShieldCheck className="h-6 w-6" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-slate-900 text-sm">
+                  <h4 className="font-extrabold text-slate-900 text-base">
                     {active.product}
                   </h4>
-                  <p className="text-xs text-slate-500 font-mono">
+                  <p className="text-xs text-slate-500 font-mono mt-0.5">
                     Session Audit Hash: {active.hash}
                   </p>
                 </div>
@@ -120,19 +115,19 @@ export function CustodySimulator() {
 
               <div>
                 {active.verdict === "APPROVED" && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                  <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-xs">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                     VERIFICATION APPROVED
                   </span>
                 )}
                 {active.verdict === "REJECTED" && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-300">
+                  <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-300 shadow-xs">
                     <XCircle className="h-4 w-4 text-rose-600" />
                     FRAUD DETECTED (REJECTED)
                   </span>
                 )}
                 {active.verdict === "FLAGGED" && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                  <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300 shadow-xs">
                     <AlertTriangle className="h-4 w-4 text-amber-600" />
                     TRANSIT DAMAGE FLAGGED
                   </span>
@@ -140,84 +135,84 @@ export function CustodySimulator() {
               </div>
             </div>
 
-            <CardContent className="p-6 md:p-8 space-y-6">
+            <CardContent className="p-6 sm:p-8 lg:p-10 space-y-8">
               {/* Metrics Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                <div className="rounded-xl bg-white border border-slate-200 p-4 space-y-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 xl:gap-6">
+                <div className="rounded-xl bg-white border border-slate-200 p-5 space-y-2 shadow-xs">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
                     Identity Match
                   </span>
-                  <div className="text-2xl font-extrabold text-slate-900">
+                  <div className="text-3xl font-extrabold text-slate-900">
                     {active.identityMatch}%
                   </div>
                   <div className="text-xs">
                     {active.identityMatch > 95 ? (
-                      <span className="text-emerald-600 font-medium">✓ Serial Confirmed</span>
+                      <span className="text-emerald-600 font-semibold">✓ Serial Confirmed</span>
                     ) : (
-                      <span className="text-rose-600 font-medium">✗ Counterfeit Mismatch</span>
+                      <span className="text-rose-600 font-semibold">✗ Counterfeit Mismatch</span>
                     )}
                   </div>
                 </div>
 
-                <div className="rounded-xl bg-white border border-slate-200 p-4 space-y-1">
+                <div className="rounded-xl bg-white border border-slate-200 p-5 space-y-2 shadow-xs">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
                     Damage Deviation
                   </span>
-                  <div className="text-2xl font-extrabold text-slate-900">
+                  <div className="text-3xl font-extrabold text-slate-900">
                     {active.damageScore}%
                   </div>
                   <div className="text-xs">
                     {active.damageScore < 5 ? (
-                      <span className="text-emerald-600 font-medium">✓ Pristine State</span>
+                      <span className="text-emerald-600 font-semibold">✓ Pristine State</span>
                     ) : (
-                      <span className="text-amber-600 font-medium">⚠ Structural Damage</span>
+                      <span className="text-amber-600 font-semibold">⚠ Structural Damage</span>
                     )}
                   </div>
                 </div>
 
-                <div className="rounded-xl bg-white border border-slate-200 p-4 space-y-1">
+                <div className="rounded-xl bg-white border border-slate-200 p-5 space-y-2 shadow-xs">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
                     Accessories
                   </span>
-                  <div className="text-2xl font-extrabold text-slate-900">
+                  <div className="text-3xl font-extrabold text-slate-900">
                     {active.accessoriesPresent ? "Complete" : "Missing"}
                   </div>
                   <div className="text-xs">
                     {active.accessoriesPresent ? (
-                      <span className="text-emerald-600 font-medium">✓ Cables & Manuals</span>
+                      <span className="text-emerald-600 font-semibold">✓ Cables & Manuals</span>
                     ) : (
-                      <span className="text-rose-600 font-medium">✗ 3 Items Missing</span>
+                      <span className="text-rose-600 font-semibold">✗ 3 Items Missing</span>
                     )}
                   </div>
                 </div>
 
-                <div className="rounded-xl bg-white border border-slate-200 p-4 space-y-1">
+                <div className="rounded-xl bg-white border border-slate-200 p-5 space-y-2 shadow-xs">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
                     Tamper Evident Seal
                   </span>
-                  <div className="text-2xl font-extrabold text-slate-900">
+                  <div className="text-3xl font-extrabold text-slate-900">
                     {active.tamperDetected ? "Broken" : "Valid"}
                   </div>
                   <div className="text-xs">
                     {active.tamperDetected ? (
-                      <span className="text-rose-600 font-medium">✗ Seal Forgery</span>
+                      <span className="text-rose-600 font-semibold">✗ Seal Forgery</span>
                     ) : (
-                      <span className="text-emerald-600 font-medium">✓ SHA-256 Intact</span>
+                      <span className="text-emerald-600 font-semibold">✓ SHA-256 Intact</span>
                     )}
                   </div>
                 </div>
               </div>
 
               {/* Live Findings Box */}
-              <div className="rounded-xl bg-white border border-slate-200 p-5 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+              <div className="rounded-xl bg-white border border-slate-200 p-6 space-y-3 shadow-xs">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-800 flex items-center gap-2">
                     <Sparkles className="h-4 w-4 text-blue-600" />
                     Automated Chain-of-Custody Findings:
                   </span>
                   <TamperEvidentSeal hash={active.hash} />
                 </div>
-                <p className="text-sm text-slate-700 font-mono bg-slate-50 p-3 rounded-lg border border-slate-200">
+                <p className="text-sm sm:text-base text-slate-800 font-mono bg-slate-50 p-4 rounded-xl border border-slate-200 leading-relaxed">
                   {active.notes}
                 </p>
               </div>

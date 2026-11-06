@@ -22,23 +22,23 @@ export function SectionHeading({
   return (
     <div
       className={cn(
-        "space-y-3",
-        align === "center" ? "text-center mx-auto max-w-3xl" : "text-left max-w-2xl",
+        "space-y-3.5",
+        align === "center" ? "text-center mx-auto max-w-4xl" : "text-left max-w-3xl",
         className
       )}
     >
       {badge && (
         <div className={align === "center" ? "flex justify-center" : "flex justify-start"}>
-          <Badge variant={badgeVariant} className="px-3 py-1 font-semibold tracking-wide uppercase text-[11px]">
+          <Badge variant={badgeVariant} className="px-3.5 py-1 font-bold tracking-wide uppercase text-[11px]">
             {badge}
           </Badge>
         </div>
       )}
-      <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-4xl">
+      <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl leading-tight">
         {title}
       </h2>
       {description && (
-        <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+        <p className="text-base sm:text-lg lg:text-xl text-slate-600 leading-relaxed font-normal">
           {description}
         </p>
       )}

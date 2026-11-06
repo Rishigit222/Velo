@@ -2,6 +2,8 @@
 
 html {
   scroll-behavior: smooth;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 :root {
@@ -10,6 +12,11 @@ html {
 }
 
 body {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
   background-color: var(--background);
   color: var(--foreground);
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
@@ -17,16 +24,16 @@ body {
 
 /* Subtle dot grid pattern matching reference SaaS aesthetics */
 .bg-grid-pattern {
-  background-image: radial-gradient(rgba(148, 163, 184, 0.25) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(148, 163, 184, 0.22) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
-/* Soft ambient mesh glow */
+/* Soft ambient mesh glow across full viewport */
 .bg-ambient-glow {
   background: radial-gradient(
     circle at 50% 0%,
-    rgba(219, 234, 254, 0.7) 0%,
-    rgba(238, 242, 255, 0.4) 40%,
+    rgba(219, 234, 254, 0.8) 0%,
+    rgba(238, 242, 255, 0.5) 35%,
     transparent 70%
   );
 }

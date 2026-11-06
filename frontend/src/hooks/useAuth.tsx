@@ -47,8 +47,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    refreshProfile();
-  }, [refreshProfile]);
+    let isMounted = true;
+    const initAuth = async () => {
+      try {
+        const activeToken = authService.getToken();
+        if (!activeToken) {
+          if (isMounted) {
+            setUser(null);
+            setToken(null);
+            setIsLoading(false);
+          }
+          return;
+        }
+        if (isMounted) setToken(activeToken);
+        const profile = await authService.getProfile();
+        if (isMounted) setUser(profile);
+      } catch {
+        authService.logout();
+        if (isMounted) {
+          setUser(null);
+          setToken(null);
+        }
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    };
+
+    initAuth();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const login = async (data: LoginRequest) => {
     setIsLoading(true);
@@ -110,4 +139,3 @@ export function useAuth(): AuthContextType {
   }
   return context;
 }
-

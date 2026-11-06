@@ -10,23 +10,23 @@ import {
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen bg-white">
-      {/* 1. Hero Section */}
+    <div className="flex flex-col min-h-screen bg-white w-full overflow-x-hidden">
+      {/* 1. Full-Width Two-Column Hero Section */}
       <Hero />
 
-      {/* 2. How It Works Section (3-Step Workflow) */}
+      {/* 2. Three-Step Custody Workflow Section */}
       <HowItWorks />
 
-      {/* 3. Core Features Section (6 Capabilities) */}
+      {/* 3. Six Core Feature Capabilities */}
       <Features />
 
-      {/* 4. Interactive Verification Engine Simulator */}
+      {/* 4. Interactive Real-Time Verification Simulator */}
       <CustodySimulator />
 
-      {/* 5. Technology Stack Section */}
+      {/* 5. Enterprise Technology Stack */}
       <TechStack />
 
-      {/* 6. Call To Action & Deployment Section */}
+      {/* 6. Call To Action Banner */}
       <CtaSection />
     </div>
   );

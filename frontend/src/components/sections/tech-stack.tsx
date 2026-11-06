@@ -4,8 +4,6 @@ import {
   Layout,
   Database,
   Lock,
-  FileCode2,
-  Cpu,
   CheckCircle2,
 } from "lucide-react";
 import { SectionHeading } from "@/components/ui/section-heading";
@@ -53,8 +51,8 @@ export function TechStack() {
   ];
 
   return (
-    <section id="tech-stack" className="py-24 bg-slate-50/60 border-t border-slate-200/80">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-16">
+    <section id="tech-stack" className="w-full py-20 lg:py-28 bg-slate-50/60 border-t border-slate-200/80">
+      <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 space-y-16 lg:space-y-20">
         <SectionHeading
           badge="Enterprise Engineering"
           badgeVariant="info"
@@ -62,19 +60,19 @@ export function TechStack() {
           description="Built on a robust, audited open-source foundation designed to scale from local testing to high-throughput enterprise clouds."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 xl:gap-8">
           {stackItems.map((item, idx) => {
             const Icon = item.icon;
             return (
               <Card
                 key={idx}
                 variant="light-gray"
-                className="bg-white border-slate-200/90 hover:border-blue-500 hover:shadow-md transition-all duration-300 flex flex-col justify-between"
+                className="bg-white border-slate-200/90 hover:border-blue-500 hover:shadow-xl transition-all duration-300 flex flex-col justify-between p-2"
               >
-                <CardHeader className="space-y-3 pb-3">
+                <CardHeader className="space-y-4 pb-3">
                   <div className="flex items-center justify-between">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 border border-blue-200/60">
-                      <Icon className="h-5 w-5" />
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600 border border-blue-200/60">
+                      <Icon className="h-6 w-6" />
                     </div>
                     <Badge variant="outline" size="sm" className="font-mono text-[10px]">
                       {item.version}
@@ -85,20 +83,20 @@ export function TechStack() {
                     <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                       {item.category}
                     </span>
-                    <CardTitle className="text-base text-slate-900 mt-0.5">
+                    <CardTitle className="text-lg text-slate-900 mt-1">
                       {item.name}
                     </CardTitle>
                   </div>
 
-                  <CardDescription className="text-xs text-slate-600 leading-relaxed">
+                  <CardDescription className="text-sm text-slate-600 leading-relaxed font-normal">
                     {item.description}
                   </CardDescription>
                 </CardHeader>
 
-                <CardContent className="pt-0 space-y-1.5 border-t border-slate-100 mt-3 pt-3">
+                <CardContent className="pt-0 space-y-2 border-t border-slate-100 mt-4 pt-4">
                   {item.features.map((feat, fidx) => (
-                    <div key={fidx} className="flex items-center gap-1.5 text-[11px] text-slate-700">
-                      <CheckCircle2 className="h-3 w-3 text-emerald-600 shrink-0" />
+                    <div key={fidx} className="flex items-center gap-2 text-xs text-slate-700">
+                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
                       <span>{feat}</span>
                     </div>
                   ))}
