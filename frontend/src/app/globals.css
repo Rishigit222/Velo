@@ -1,12 +1,84 @@
 @import "tailwindcss";
 
+html {
+  scroll-behavior: smooth;
+  width: 100%;
+  overflow-x: hidden;
+  background-color: #080808;
+  color: #ffffff;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #09090b;
+  --background: #080808;
+  --foreground: #ffffff;
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background-color: #080808;
+  color: #ffffff;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+/* Full-width responsive site containers (1760px content, 1840px header) */
+.site-container {
+  width: 100%;
+  max-width: 1760px;
+  margin-inline: auto;
+  padding-inline: clamp(24px, 4vw, 64px);
+  box-sizing: border-box;
+}
+
+.site-header-container {
+  width: 100%;
+  max-width: 1840px;
+  margin-inline: auto;
+  padding-inline: clamp(24px, 4vw, 64px);
+  box-sizing: border-box;
+}
+
+/* Devnovate-inspired Dark Aesthetics */
+.dark-hero-glow {
+  background: radial-gradient(
+    circle at 50% -10%,
+    rgba(56, 103, 255, 0.18) 0%,
+    rgba(32, 201, 151, 0.06) 45%,
+    transparent 70%
+  );
+}
+
+.dark-section-glow {
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(56, 103, 255, 0.08) 0%,
+    transparent 65%
+  );
+}
+
+.glass-nav {
+  background: rgba(12, 12, 14, 0.78);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.card-dark {
+  background-color: #171717;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.card-elevated {
+  background-color: #202020;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Subtle grid line accents */
+.bg-dark-grid {
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
 }

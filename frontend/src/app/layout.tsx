@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/hooks/useAuth";
+import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,10 +15,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const serifFont = Playfair_Display({
+  variable: "--font-serif",
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+});
+
 export const metadata: Metadata = {
-  title: "ReturnProof — AI Digital Chain-of-Custody & Return Verification",
+  title: "ReturnProof — Digital Chain-of-Custody for Deliveries & Returns",
   description:
-    "AI-assisted digital chain-of-custody platform for e-commerce product delivery, unboxing, and verified returns.",
+    "Protect every delivery and return with verifiable cryptographic evidence, secure media capture, and intelligent AI product condition verification.",
 };
 
 export default function RootLayout({
@@ -25,9 +33,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-      <body className="min-h-screen flex flex-col bg-white text-slate-900">
-        <AuthProvider>{children}</AuthProvider>
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} ${serifFont.variable} antialiased scroll-smooth dark`}
+    >
+      <body className="min-h-screen flex flex-col bg-[#080808] text-white selection:bg-[#3867FF]/30 selection:text-white">
+        <AuthProvider>
+          <Navbar />
+          <main className="flex-1 w-full">{children}</main>
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );
