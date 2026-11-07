@@ -61,3 +61,4 @@ class Report(Base):
 
     def __repr__(self) -> str:
         return f"<Report id={self.id} order_id={self.order_id} file_name='{self.file_name}'>"
+

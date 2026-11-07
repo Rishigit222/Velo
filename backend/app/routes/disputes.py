@@ -93,3 +93,4 @@ def patch_dispute_status(
         current_user=current_user,
     )
     return DisputeResponse.model_validate(updated)
+

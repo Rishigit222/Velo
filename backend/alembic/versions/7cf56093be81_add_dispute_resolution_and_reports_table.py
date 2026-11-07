@@ -58,3 +58,4 @@ def downgrade() -> None:
 
     with op.batch_alter_table('disputes', schema=None) as batch_op:
         batch_op.drop_column('resolution_details')
+
