@@ -1,417 +1,325 @@
 "use client";
 
 import React, { useState } from "react";
-import { SectionHeading } from "@/components/ui/section-heading";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-interface TestCase {
-  id: string;
-  name: string;
-  category: string;
-  orderNumber: string;
-  dispatch: {
-    timestamp: string;
-    hash: string;
-    sealStatus: string;
-    accessoriesCount: number;
-    accessoriesTotal: number;
-    serial: string;
-  };
-  returnIntake: {
-    timestamp: string;
-    hash: string;
-    sealStatus: string;
-    accessoriesCount: number;
-    accessoriesTotal: number;
-    serial: string;
-    conditionScore: number;
-    findings: string[];
-    decision: string;
-    decisionType: "partial" | "rejected" | "approved";
-  };
-}
+const cases = [
+  {
+    id: "c1",
+    label: "Sony WH-1000XM5",
+    order: "RP-8821-X9",
+    decisionType: "partial" as const,
+    score: 92.4,
+    dispatch: {
+      timestamp: "Dec 12, 2026 · 09:14 UTC",
+      hash: "7f83b165...bc6841e6",
+      seal: "INTACT_FACTORY_SEAL",
+      sealColor: "text-[#20C997]",
+      accessories: "4 of 4",
+      serial: "SN: 7492-X902-WH5",
+    },
+    returnData: {
+      timestamp: "Dec 20, 2026 · 15:42 UTC",
+      hash: "e4129a08...f1027b99",
+      seal: "BROKEN_BY_CUSTOMER",
+      sealColor: "text-amber-400",
+      accessories: "3 of 4",
+      serial: "SN: 7492-X902-WH5",
+    },
+    findings: [
+      "✓ Serial confirmed: exact match dispatch record",
+      "✕ USB-C charging cable absent",
+      "△ Cosmetic: 3mm scratch on left gimbal",
+      "✓ ANC + drivers fully operational",
+    ],
+    decision: "Partial Refund — Deduct Cable ($15.00)",
+  },
+  {
+    id: "c2",
+    label: "Apple iPhone 16 Pro Max",
+    order: "RP-9402-A1",
+    decisionType: "rejected" as const,
+    score: 12.0,
+    dispatch: {
+      timestamp: "Dec 15, 2026 · 11:30 UTC",
+      hash: "9912bc0a...5541ea22",
+      seal: "ORIGINAL_PULL_TAB",
+      sealColor: "text-[#20C997]",
+      accessories: "2 of 2",
+      serial: "IMEI: 354829104928172",
+    },
+    returnData: {
+      timestamp: "Dec 23, 2026 · 13:10 UTC",
+      hash: "4a88019b...cc871400",
+      seal: "RE-GLUED_NON_OEM",
+      sealColor: "text-rose-400",
+      accessories: "1 of 2",
+      serial: "IMEI: 354899990182741 ⚠",
+    },
+    findings: [
+      "✕ CRITICAL: Return IMEI ≠ dispatch unit",
+      "✕ Device swap: blacklisted iPhone 14 Pro chassis",
+      "✕ Third-party counterfeit adhesive detected",
+      "✕ Handset flagged on national blacklist DB",
+    ],
+    decision: "Return Fraud Rejected — Dispute Report Generated",
+  },
+  {
+    id: "c3",
+    label: "Bottega Veneta Tote",
+    order: "RP-7719-L3",
+    decisionType: "approved" as const,
+    score: 99.8,
+    dispatch: {
+      timestamp: "Dec 18, 2026 · 16:05 UTC",
+      hash: "3381ea5b...10948c21",
+      seal: "SECURITY_TAG_#BV-491",
+      sealColor: "text-[#20C997]",
+      accessories: "3 of 3",
+      serial: "RFID: 0x48A901",
+    },
+    returnData: {
+      timestamp: "Dec 24, 2026 · 11:18 UTC",
+      hash: "6612df99...871b002c",
+      seal: "TAG_INTACT_AUTHENTIC",
+      sealColor: "text-[#20C997]",
+      accessories: "3 of 3",
+      serial: "RFID: 0x48A901",
+    },
+    findings: [
+      "✓ Seal #BV-491: 100% intact and authenticated",
+      "✓ RFID: matches merchant dispatch cryptography",
+      "✓ Leather: zero creasing, zero corner wear (A+)",
+      "✓ All accessories: dust bag + care cards present",
+    ],
+    decision: "100% Authorized — Instant Refund Dispatched",
+  },
+];
+
+const decisionColors = {
+  partial: { score: "text-amber-400", badge: "bg-amber-400/15 text-amber-300 border-amber-400/30", dot: "bg-amber-400" },
+  rejected: { score: "text-rose-400", badge: "bg-rose-500/15 text-rose-300 border-rose-500/30", dot: "bg-rose-500" },
+  approved: { score: "text-[#20C997]", badge: "bg-[#20C997]/15 text-[#20C997] border-[#20C997]/30", dot: "bg-[#20C997]" },
+};
 
 export function VerificationEngine() {
-  const testCases: TestCase[] = [
-    {
-      id: "case-1",
-      name: "Sony WH-1000XM5 Headphones",
-      category: "Consumer Electronics",
-      orderNumber: "RP-8821-X9",
-      dispatch: {
-        timestamp: "Dec 12, 2026 • 09:14 UTC",
-        hash: "7f83b165...bc6841e6",
-        sealStatus: "INTACT_FACTORY_SEAL",
-        accessoriesCount: 4,
-        accessoriesTotal: 4,
-        serial: "SN: 7492-X902-WH5",
-      },
-      returnIntake: {
-        timestamp: "Dec 20, 2026 • 15:42 UTC",
-        hash: "e4129a08...f1027b99",
-        sealStatus: "BROKEN_BY_CUSTOMER",
-        accessoriesCount: 3,
-        accessoriesTotal: 4,
-        serial: "SN: 7492-X902-WH5",
-        conditionScore: 92.4,
-        findings: [
-          "Item Serial Confirmed: Exact match with dispatch record",
-          "Missing Accessory: USB-C braided charging cable absent",
-          "Cosmetic Finding: Superficial 3mm scratch on left gimbal",
-          "Functionality: Drivers and Active Noise Cancelling operational",
-        ],
-        decision: "Partial Refund Approved — Deduct Cable ($15.00)",
-        decisionType: "partial",
-      },
-    },
-    {
-      id: "case-2",
-      name: "Apple iPhone 16 Pro Max 256GB",
-      category: "Smartphones",
-      orderNumber: "RP-9402-A1",
-      dispatch: {
-        timestamp: "Dec 15, 2026 • 11:30 UTC",
-        hash: "9912bc0a...5541ea22",
-        sealStatus: "ORIGINAL_PULL_TAB",
-        accessoriesCount: 2,
-        accessoriesTotal: 2,
-        serial: "IMEI: 354829104928172",
-      },
-      returnIntake: {
-        timestamp: "Dec 23, 2026 • 13:10 UTC",
-        hash: "4a88019b...cc871400",
-        sealStatus: "RE-GLUED_NON_OEM",
-        accessoriesCount: 1,
-        accessoriesTotal: 2,
-        serial: "IMEI: 354899990182741 (MISMATCH)",
-        conditionScore: 12.0,
-        findings: [
-          "CRITICAL FRAUD ALERT: Return IMEI does not match dispatch unit",
-          "Device Swap: Returned unit is blacklisted iPhone 14 Pro chassis",
-          "Tamper Alert: Third-party counterfeit adhesive detected",
-          "Carrier Alert: Handset IMEI flagged on national blacklist database",
-        ],
-        decision: "Return Fraud Rejected — Dispute Report Generated",
-        decisionType: "rejected",
-      },
-    },
-    {
-      id: "case-3",
-      name: "Bottega Veneta Leather Tote",
-      category: "Luxury Fashion",
-      orderNumber: "RP-7719-L3",
-      dispatch: {
-        timestamp: "Dec 18, 2026 • 16:05 UTC",
-        hash: "3381ea5b...10948c21",
-        sealStatus: "SECURITY_TAG_#BV-491",
-        accessoriesCount: 3,
-        accessoriesTotal: 3,
-        serial: "RFID TAG: 0x48A901",
-      },
-      returnIntake: {
-        timestamp: "Dec 24, 2026 • 11:18 UTC",
-        hash: "6612df99...871b002c",
-        sealStatus: "TAG_INTACT_AUTHENTIC",
-        accessoriesCount: 3,
-        accessoriesTotal: 3,
-        serial: "RFID TAG: 0x48A901",
-        conditionScore: 99.8,
-        findings: [
-          "Tamper Seal #BV-491: 100% Intact and verified authentic",
-          "RFID Serial: Matches merchant dispatch cryptography",
-          "Leather Condition: Zero creasing, zero corner wear (Grade A+)",
-          "All Original Accessories: Dust bag and care cards included",
-        ],
-        decision: "100% Authorized — Instant Refund Dispatched",
-        decisionType: "approved",
-      },
-    },
-  ];
-
-  const [activeCaseIndex, setActiveCaseIndex] = useState(0);
-  const current = testCases[activeCaseIndex];
+  const [active, setActive] = useState(0);
+  const c = cases[active];
+  const dc = decisionColors[c.decisionType];
 
   return (
-    <section id="verification-engine" className="w-full py-24 sm:py-32 relative bg-[#09090c] border-y border-white/[0.06]">
-      <div className="site-container">
-        <SectionHeading
-          badge="Live Interactive Engine"
-          badgeVariant="success"
-          title="Compare. Verify. Understand."
-          serifHighlight="Verify. Understand."
-          subtitle="Explore live side-by-side condition matching. ReturnProof cross-references dispatch baselines against return evidence in milliseconds."
-          align="center"
-        />
+    <section id="verification-engine" className="w-full py-24 sm:py-32 bg-[#09090c] border-y border-white/[0.05]">
+      <div className="pw">
 
-        {/* Case Switcher Tabs */}
-        <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
-          {testCases.map((c, index) => (
-            <button
-              key={c.id}
-              onClick={() => setActiveCaseIndex(index)}
-              className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all ${
-                activeCaseIndex === index
-                  ? "bg-[#3867FF] text-white shadow-[0_0_20px_rgba(56,103,255,0.4)] border border-[#3867FF]"
-                  : "bg-[#141417] text-zinc-400 hover:text-white border border-white/10 hover:border-white/20"
-              }`}
-            >
-              <span>{c.name}</span>
-              <span className="ml-2 font-mono text-[11px] opacity-75">
-                ({c.orderNumber})
-              </span>
-            </button>
-          ))}
-        </div>
+        {/* ── ASYMMETRIC 45/55 layout ── */}
+        <div className="grid grid-cols-1 xl:grid-cols-[45fr_55fr] gap-12 xl:gap-16 items-start">
 
-        {/* Comparison Console Card */}
-        <div className="rounded-3xl bg-[#121215] border border-white/[0.1] shadow-2xl shadow-black overflow-hidden">
-          {/* Header Bar */}
-          <div className="p-6 bg-[#17171c] border-b border-white/[0.08] flex flex-wrap items-center justify-between gap-4">
+          {/* LEFT: Heading + Description + Feature list */}
+          <div className="flex flex-col space-y-7">
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-[#7fa3ff] bg-[#3867FF]/15 px-2 py-0.5 rounded border border-[#3867FF]/30">
-                  {current.orderNumber}
+              <div className="eyebrow eyebrow-green mb-5">Live Interactive Engine</div>
+              <h2 className="text-4xl sm:text-5xl xl:text-6xl font-bold text-white tracking-tight leading-[1.08]">
+                Compare.{" "}
+                <span className="serif-accent gradient-text-blue">
+                  Verify. Understand.
                 </span>
-                <span className="text-xs text-zinc-400">• {current.category}</span>
-              </div>
-              <h3 className="text-xl font-bold text-white mt-1">
-                {current.name}
-              </h3>
+              </h2>
             </div>
 
-            <div className="flex items-center gap-3">
-              <span className="text-xs text-zinc-400">Match Confidence:</span>
-              <span
-                className={`text-2xl font-bold font-mono ${
-                  current.returnIntake.conditionScore > 90
-                    ? "text-[#20C997]"
-                    : current.returnIntake.conditionScore > 50
-                    ? "text-amber-400"
-                    : "text-rose-500"
-                }`}
-              >
-                {current.returnIntake.conditionScore}%
-              </span>
-            </div>
-          </div>
+            <p className="text-base xl:text-lg text-zinc-400 leading-relaxed">
+              ReturnProof cross-references the dispatch baseline against return
+              intake evidence in milliseconds — surfacing fraud, missing accessories,
+              and cosmetic discrepancies with AI precision.
+            </p>
 
-          {/* Side-by-Side Comparison Grid */}
-          <div className="p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Left Panel: Dispatch Baseline */}
-            <div className="flex flex-col space-y-4 p-5 rounded-2xl bg-[#0d0d10] border border-white/[0.08]">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#3867FF]" />
-                  <span className="text-xs uppercase tracking-wider font-bold text-zinc-300">
-                    Dispatch Baseline Evidence
-                  </span>
-                </div>
-                <Badge variant="outline" size="sm" className="text-zinc-400 font-mono">
-                  Origin Reference
-                </Badge>
+            <ul className="space-y-3.5">
+              {[
+                { icon: "🔍", text: "Multi-angle AI visual diff detects damage at sub-millimeter precision" },
+                { icon: "🔐", text: "IMEI, serial, and RFID cross-match against original dispatch record" },
+                { icon: "📋", text: "Accessories checklist automatically compared item by item" },
+                { icon: "📄", text: "Instant dispute PDF generated with side-by-side photographic evidence" },
+                { icon: "✅", text: "Automated verdicts reduce review time from days to seconds" },
+              ].map((item) => (
+                <li key={item.text} className="flex items-start gap-3 text-sm xl:text-[15px] text-zinc-300">
+                  <span className="text-base mt-0.5 shrink-0">{item.icon}</span>
+                  <span>{item.text}</span>
+                </li>
+              ))}
+            </ul>
+
+            {/* Case selector tabs */}
+            <div className="pt-4">
+              <div className="text-xs text-zinc-500 font-mono uppercase tracking-wider mb-3">
+                Interactive Test Cases:
               </div>
-
-              {/* Viewport Illustration */}
-              <div className="relative w-full h-48 rounded-xl bg-[#060608] border border-white/10 p-4 flex flex-col justify-between overflow-hidden bg-dark-grid">
-                <div className="flex justify-between items-center text-xs font-mono text-zinc-400">
-                  <span>DISPATCH_SCAN_01</span>
-                  <span className="text-emerald-400">100% UNTOUCHED</span>
-                </div>
-
-                <div className="text-center my-auto">
-                  <div className="inline-block p-3 rounded-lg border border-dashed border-[#3867FF]/40 bg-[#3867FF]/5">
-                    <p className="font-mono text-xs font-semibold text-white">
-                      {current.dispatch.serial}
-                    </p>
-                    <p className="text-[10px] text-zinc-400 mt-0.5">
-                      Factory Sealed • Full Package
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex justify-between items-center text-[11px] font-mono text-zinc-500">
-                  <span>Logged: {current.dispatch.timestamp}</span>
-                  <span className="text-[#85a8ff]">NOTARIZED</span>
-                </div>
-              </div>
-
-              {/* Baseline Metrics */}
-              <div className="space-y-2 text-xs font-mono">
-                <div className="flex justify-between p-2 rounded bg-white/[0.02]">
-                  <span className="text-zinc-400">Security Seal:</span>
-                  <span className="text-emerald-400">{current.dispatch.sealStatus}</span>
-                </div>
-                <div className="flex justify-between p-2 rounded bg-white/[0.02]">
-                  <span className="text-zinc-400">Accessories Present:</span>
-                  <span className="text-zinc-200">
-                    {current.dispatch.accessoriesCount} of {current.dispatch.accessoriesTotal} items
-                  </span>
-                </div>
-                <div className="flex justify-between p-2 rounded bg-white/[0.02]">
-                  <span className="text-zinc-400">Baseline SHA-256:</span>
-                  <span className="text-[#85a8ff]">{current.dispatch.hash}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Panel: Return Intake Evidence */}
-            <div className="flex flex-col space-y-4 p-5 rounded-2xl bg-[#0d0d10] border border-white/[0.08]">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span
-                    className={`w-2.5 h-2.5 rounded-full ${
-                      current.returnIntake.decisionType === "approved"
-                        ? "bg-[#20C997]"
-                        : current.returnIntake.decisionType === "partial"
-                        ? "bg-amber-400"
-                        : "bg-rose-500"
-                    }`}
-                  />
-                  <span className="text-xs uppercase tracking-wider font-bold text-zinc-300">
-                    Return Intake Evidence
-                  </span>
-                </div>
-                <Badge
-                  variant={
-                    current.returnIntake.decisionType === "approved"
-                      ? "success"
-                      : current.returnIntake.decisionType === "partial"
-                      ? "warning"
-                      : "danger"
-                  }
-                  size="sm"
-                  className="font-mono"
-                >
-                  {current.returnIntake.decisionType.toUpperCase()}
-                </Badge>
-              </div>
-
-              {/* Viewport Illustration */}
-              <div className="relative w-full h-48 rounded-xl bg-[#060608] border border-white/10 p-4 flex flex-col justify-between overflow-hidden bg-dark-grid">
-                <div className="flex justify-between items-center text-xs font-mono text-zinc-400">
-                  <span>RETURN_SCAN_DIFF</span>
-                  <span
-                    className={
-                      current.returnIntake.decisionType === "approved"
-                        ? "text-emerald-400"
-                        : current.returnIntake.decisionType === "partial"
-                        ? "text-amber-400"
-                        : "text-rose-400 font-bold"
-                    }
-                  >
-                    AI DELTA DETECTED
-                  </span>
-                </div>
-
-                <div className="text-center my-auto">
-                  <div
-                    className={`inline-block p-3 rounded-lg border border-dashed ${
-                      current.returnIntake.decisionType === "approved"
-                        ? "border-[#20C997]/40 bg-[#20C997]/5"
-                        : current.returnIntake.decisionType === "partial"
-                        ? "border-amber-500/40 bg-amber-500/5"
-                        : "border-rose-500/40 bg-rose-500/5"
-                    }`}
-                  >
-                    <p className="font-mono text-xs font-semibold text-white">
-                      {current.returnIntake.serial}
-                    </p>
-                    <p
-                      className={`text-[10px] mt-0.5 ${
-                        current.returnIntake.decisionType === "rejected"
-                          ? "text-rose-400 font-bold"
-                          : "text-zinc-400"
+              <div className="flex flex-col gap-2">
+                {cases.map((cs, i) => {
+                  const dcs = decisionColors[cs.decisionType];
+                  return (
+                    <button
+                      key={cs.id}
+                      onClick={() => setActive(i)}
+                      className={`flex items-center justify-between gap-3 px-4 py-3 rounded-xl border text-sm font-medium transition-all text-left ${
+                        active === i
+                          ? "bg-[#1a1a20] border-[#3867FF]/40 text-white"
+                          : "bg-[#111115] border-white/[0.07] text-zinc-400 hover:text-zinc-200 hover:border-white/15"
                       }`}
                     >
-                      {current.returnIntake.decisionType === "rejected"
-                        ? "FRAUDULENT SWAP DETECTED"
-                        : "Inspection Completed"}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex justify-between items-center text-[11px] font-mono text-zinc-500">
-                  <span>Intake: {current.returnIntake.timestamp}</span>
-                  <span className="text-[#85a8ff]">NOTARIZED</span>
-                </div>
-              </div>
-
-              {/* Return Metrics */}
-              <div className="space-y-2 text-xs font-mono">
-                <div className="flex justify-between p-2 rounded bg-white/[0.02]">
-                  <span className="text-zinc-400">Return Seal:</span>
-                  <span
-                    className={
-                      current.returnIntake.sealStatus.includes("INTACT")
-                        ? "text-emerald-400"
-                        : "text-amber-400"
-                    }
-                  >
-                    {current.returnIntake.sealStatus}
-                  </span>
-                </div>
-                <div className="flex justify-between p-2 rounded bg-white/[0.02]">
-                  <span className="text-zinc-400">Accessories Present:</span>
-                  <span
-                    className={
-                      current.returnIntake.accessoriesCount === current.returnIntake.accessoriesTotal
-                        ? "text-zinc-200"
-                        : "text-amber-400 font-bold"
-                    }
-                  >
-                    {current.returnIntake.accessoriesCount} of {current.returnIntake.accessoriesTotal} items
-                  </span>
-                </div>
-                <div className="flex justify-between p-2 rounded bg-white/[0.02]">
-                  <span className="text-zinc-400">Intake SHA-256:</span>
-                  <span className="text-[#85a8ff]">{current.returnIntake.hash}</span>
-                </div>
+                      <div className="flex items-center gap-2.5">
+                        <span className={`w-2 h-2 rounded-full shrink-0 ${dcs.dot}`} />
+                        <span>{cs.label}</span>
+                      </div>
+                      <span className={`text-[11px] font-mono px-2 py-0.5 rounded border ${dcs.badge}`}>
+                        {cs.decisionType.toUpperCase()}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>
 
-          {/* Bottom Analysis Findings & Automated Decision */}
-          <div className="p-6 lg:p-8 bg-[#101014] border-t border-white/[0.08] flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-            <div className="flex-1 space-y-2">
-              <h4 className="text-xs uppercase tracking-wider font-semibold text-zinc-400">
-                Automated Verification Findings:
-              </h4>
-              <ul className="space-y-1.5 text-xs sm:text-sm text-zinc-300">
-                {current.returnIntake.findings.map((f, i) => (
-                  <li key={i} className="flex items-center gap-2">
-                    <span className="text-[#3867FF] text-xs">▸</span>
-                    <span>{f}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="w-full lg:w-auto p-4 rounded-xl bg-[#16161b] border border-white/10 flex flex-col space-y-3 min-w-[320px]">
+          {/* RIGHT: Large comparison console */}
+          <div className="console-panel shadow-2xl shadow-black/70">
+            {/* Console top bar */}
+            <div className="console-topbar">
               <div>
-                <span className="text-[11px] uppercase tracking-wider text-zinc-400 block">
-                  Recommended Action:
+                <span className="text-[11px] font-mono text-[#5e85ff] bg-[#3867FF]/12 px-2 py-0.5 rounded border border-[#3867FF]/25">
+                  {c.order}
                 </span>
-                <span
-                  className={`text-sm sm:text-base font-bold ${
-                    current.returnIntake.decisionType === "approved"
-                      ? "text-[#20C997]"
-                      : current.returnIntake.decisionType === "partial"
-                      ? "text-amber-400"
-                      : "text-rose-400"
-                  }`}
-                >
-                  {current.returnIntake.decision}
+                <span className="ml-2 text-[11px] text-zinc-500 font-mono">{c.label}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-zinc-400">Match:</span>
+                <span className={`text-lg font-bold font-mono ${dc.score}`}>
+                  {c.score}%
                 </span>
               </div>
+            </div>
 
-              <Button
-                variant={current.returnIntake.decisionType === "rejected" ? "secondary" : "primary"}
-                size="sm"
-                className="w-full"
-              >
-                Export Dispute Evidence PDF
-              </Button>
+            {/* Side-by-side panels */}
+            <div className="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Dispatch baseline */}
+              <div className="rounded-xl bg-[#0d0d11] border border-white/[0.07] overflow-hidden">
+                <div className="px-4 py-2.5 bg-[#111116] border-b border-white/[0.05] flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#3867FF]" />
+                  <span className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wide">
+                    Dispatch Baseline
+                  </span>
+                </div>
+                {/* Viewfinder mockup */}
+                <div className="h-36 bg-[#07070a] flex items-center justify-center relative bg-dark-grid">
+                  <div className="border-2 border-dashed border-[#3867FF]/50 rounded-lg p-3 text-center">
+                    <div className="text-[11px] font-mono text-[#85a8ff]">{c.dispatch.serial}</div>
+                    <div className="text-[10px] text-zinc-500 mt-1">Factory Sealed · Full Package</div>
+                  </div>
+                  <div className="absolute top-2 left-2 text-[9px] font-mono text-zinc-500">
+                    {c.dispatch.timestamp}
+                  </div>
+                </div>
+                <div className="p-4 space-y-2 font-mono text-xs">
+                  <div className="flex justify-between">
+                    <span className="text-zinc-500">Seal:</span>
+                    <span className={c.dispatch.sealColor}>{c.dispatch.seal}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-zinc-500">Accessories:</span>
+                    <span className="text-zinc-200">{c.dispatch.accessories}</span>
+                  </div>
+                  <div className="flex justify-between pt-1 border-t border-white/[0.04]">
+                    <span className="text-zinc-500">SHA-256:</span>
+                    <span className="text-[#85a8ff]">{c.dispatch.hash}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Return intake */}
+              <div className="rounded-xl bg-[#0d0d11] border border-white/[0.07] overflow-hidden">
+                <div className="px-4 py-2.5 bg-[#111116] border-b border-white/[0.05] flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className={`w-2 h-2 rounded-full ${dc.dot}`} />
+                    <span className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wide">
+                      Return Intake
+                    </span>
+                  </div>
+                  <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${dc.badge}`}>
+                    {c.decisionType.toUpperCase()}
+                  </span>
+                </div>
+                {/* Viewfinder mockup */}
+                <div className="h-36 bg-[#07070a] flex items-center justify-center relative bg-dark-grid">
+                  <div
+                    className={`border-2 border-dashed rounded-lg p-3 text-center ${
+                      c.decisionType === "rejected"
+                        ? "border-rose-500/50 bg-rose-500/5"
+                        : c.decisionType === "partial"
+                        ? "border-amber-400/50 bg-amber-400/5"
+                        : "border-[#20C997]/50 bg-[#20C997]/5"
+                    }`}
+                  >
+                    <div className="text-[11px] font-mono text-zinc-200">{c.returnData.serial}</div>
+                    <div className={`text-[10px] mt-1 font-semibold ${dc.score}`}>
+                      {c.decisionType === "rejected" ? "FRAUD DETECTED" : c.decisionType === "partial" ? "DISCREPANCY FOUND" : "AUTHENTIC"}
+                    </div>
+                  </div>
+                  <div className="absolute top-2 left-2 text-[9px] font-mono text-zinc-500">
+                    {c.returnData.timestamp}
+                  </div>
+                </div>
+                <div className="p-4 space-y-2 font-mono text-xs">
+                  <div className="flex justify-between">
+                    <span className="text-zinc-500">Seal:</span>
+                    <span className={c.returnData.sealColor}>{c.returnData.seal}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-zinc-500">Accessories:</span>
+                    <span
+                      className={
+                        c.returnData.accessories !== c.dispatch.accessories
+                          ? "text-amber-400 font-bold"
+                          : "text-zinc-200"
+                      }
+                    >
+                      {c.returnData.accessories}
+                    </span>
+                  </div>
+                  <div className="flex justify-between pt-1 border-t border-white/[0.04]">
+                    <span className="text-zinc-500">SHA-256:</span>
+                    <span className="text-[#85a8ff]">{c.returnData.hash}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Findings + Action */}
+            <div className="px-5 pb-5 space-y-4">
+              <div className="rounded-xl bg-[#0a0a0e] border border-white/[0.05] p-4">
+                <div className="text-[11px] font-mono text-zinc-500 uppercase tracking-wider mb-3">
+                  Automated Findings:
+                </div>
+                <ul className="space-y-1.5">
+                  {c.findings.map((f, i) => (
+                    <li key={i} className="text-sm text-zinc-300 flex items-start gap-2">
+                      <span className="text-[#3867FF] text-xs mt-0.5 shrink-0">▸</span>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-xl bg-[#0d0d12] border border-white/[0.07]">
+                <div>
+                  <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">
+                    Recommended Action:
+                  </div>
+                  <div className={`text-sm font-semibold mt-0.5 ${dc.score}`}>
+                    {c.decision}
+                  </div>
+                </div>
+                <Button variant="primary" size="sm" className="shrink-0">
+                  Export Evidence PDF
+                </Button>
+              </div>
             </div>
           </div>
         </div>

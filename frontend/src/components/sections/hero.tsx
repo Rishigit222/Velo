@@ -3,286 +3,270 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Badge, VerificationBadge } from "@/components/ui/badge";
 
 export function Hero() {
-  const [activeStep, setActiveStep] = useState<number>(2); // 1 = Dispatch, 2 = Unboxing, 3 = Return
+  const [activeStep, setActiveStep] = useState(1);
+
+  const steps = ["Dispatch", "Unboxing", "Return"];
+
+  const stepContent = {
+    1: {
+      label: "DISPATCH_SCAN_01 • 2026-12-18 09:14:04 UTC",
+      status: "Factory seal verified • SHA-256 baseline sealed",
+      finding: "SEAL: INTACT [PASS] • SN: 7492-X902-WH5",
+      findingColor: "text-[#20C997]",
+    },
+    2: {
+      label: "UNBOX_SCAN_02 • 2026-12-18 14:32:09 UTC",
+      status: "AI vision scan active • 4 accessories confirmed",
+      finding: "OBJ: RETAIL_BOX • CONF: 99.8% • EXIF_VERIFIED",
+      findingColor: "text-[#85a8ff]",
+    },
+    3: {
+      label: "RETURN_SCAN_03 • 2026-12-22 16:45:12 UTC",
+      status: "Condition diff complete • 1 discrepancy flagged",
+      finding: "USB-C cable absent • Cosmetic: 3mm scratch left gimbal",
+      findingColor: "text-amber-400",
+    },
+  };
+
+  const content = stepContent[activeStep as keyof typeof stepContent];
 
   return (
-    <section className="relative w-full pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden dark-hero-glow">
-      {/* Background ambient lighting */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#3867FF]/15 blur-[140px] pointer-events-none rounded-full" />
-      <div className="absolute top-1/3 right-10 w-[500px] h-[300px] bg-[#20C997]/10 blur-[120px] pointer-events-none rounded-full" />
+    <section className="relative w-full min-h-screen flex items-center pt-20 pb-16 dark-hero-glow overflow-hidden">
+      {/* Background grid */}
+      <div className="absolute inset-0 bg-dark-grid opacity-50 pointer-events-none" />
 
-      <div className="site-container relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
-          {/* Left Column: Headline, Copy & CTAs */}
-          <div className="lg:col-span-6 flex flex-col space-y-6 text-left">
-            {/* Top Announcement Pill */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.06] border border-white/10 hover:border-white/20 transition-all max-w-fit shadow-inner">
-              <span className="w-2 h-2 rounded-full bg-[#3867FF] animate-pulse" />
-              <span className="text-xs font-medium text-zinc-300">
-                Next-Gen Custody Protocol 2.0
-              </span>
-              <span className="text-[11px] font-mono text-[#79a0ff] font-semibold flex items-center gap-0.5">
-                Explore →
-              </span>
+      <div className="pw w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-[46fr_54fr] gap-10 xl:gap-16 items-center">
+
+          {/* ═══════════════════════════════════════
+              LEFT COLUMN — Copy & CTAs
+          ═══════════════════════════════════════ */}
+          <div className="flex flex-col space-y-7">
+
+            {/* Eyebrow badge */}
+            <div className="eyebrow max-w-fit">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#3867FF] animate-pulse" />
+              Custody Protocol v2.0 — Now Live
             </div>
 
-            {/* Main Headline with Serif Accent */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-bold tracking-tight text-white leading-[1.08]">
+            {/* Headline */}
+            <h1 className="text-5xl sm:text-6xl xl:text-7xl 2xl:text-[80px] font-bold tracking-tight text-white leading-[1.05]">
               Every Delivery.
               <br />
               Every Return.
               <br />
-              <span className="font-[family-name:var(--font-serif)] italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-[#507dff] via-[#8bb0ff] to-[#20C997]">
+              <span className="serif-accent gradient-text-blue">
                 Every Proof.
               </span>
             </h1>
 
-            {/* Subtitle */}
-            <p className="text-base sm:text-lg md:text-xl text-zinc-400 font-normal leading-relaxed max-w-xl">
-              ReturnProof is the digital chain-of-custody platform that
-              cryptographically records, verifies, and preserves product
+            {/* Subheadline */}
+            <p className="text-lg xl:text-xl text-zinc-400 leading-relaxed max-w-lg">
+              ReturnProof cryptographically records, verifies, and locks product
               condition across dispatch, unboxing, and returns — stopping false
               damage claims and return fraud before they happen.
             </p>
 
-            {/* Action Buttons */}
-            <div className="flex flex-wrap items-center gap-4 pt-2">
+            {/* CTAs */}
+            <div className="flex flex-wrap gap-4 pt-2">
               <Link href="#cta">
-                <Button variant="primary" size="lg" className="font-semibold text-base px-8 py-3.5">
+                <Button
+                  variant="primary"
+                  size="lg"
+                  className="font-semibold text-[15px] px-8 h-12"
+                >
                   Get Started Free
                 </Button>
               </Link>
-
               <Link href="#verification-engine">
                 <Button
                   variant="secondary"
                   size="lg"
-                  className="text-base px-7 py-3.5 flex items-center gap-2 group"
+                  className="text-[15px] px-7 h-12 gap-2 group"
                 >
                   <span>Explore Platform</span>
-                  <svg
-                    className="w-4 h-4 text-zinc-400 group-hover:text-white group-hover:translate-x-0.5 transition-all"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M14 5l7 7m0 0l-7 7m7-7H3"
-                    />
+                  <svg className="w-4 h-4 text-zinc-400 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
                 </Button>
               </Link>
             </div>
 
-            {/* Trust Indicators / Badges */}
-            <div className="pt-6 border-t border-white/[0.08] grid grid-cols-3 gap-4 max-w-lg">
+            {/* Trust metrics */}
+            <div className="flex flex-wrap gap-8 pt-4 border-t border-white/[0.07]">
               <div>
-                <p className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-                  100%
-                </p>
-                <p className="text-xs text-zinc-400 mt-0.5">
-                  Cryptographic Audit
-                </p>
+                <div className="text-2xl font-bold text-white font-mono">SHA-256</div>
+                <div className="text-xs text-zinc-500 mt-0.5 tracking-wide">Cryptographic Seal</div>
               </div>
               <div>
-                <p className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-                  SHA-256
-                </p>
-                <p className="text-xs text-zinc-400 mt-0.5">
-                  Client & Server Seal
-                </p>
+                <div className="text-2xl font-bold text-white font-mono">100%</div>
+                <div className="text-xs text-zinc-500 mt-0.5 tracking-wide">Audit Coverage</div>
               </div>
               <div>
-                <p className="text-xl sm:text-2xl font-bold text-[#20C997] tracking-tight">
-                  99.4%
-                </p>
-                <p className="text-xs text-zinc-400 mt-0.5">
-                  AI Condition Accuracy
-                </p>
+                <div className="text-2xl font-bold text-[#20C997] font-mono">99.4%</div>
+                <div className="text-xs text-zinc-500 mt-0.5 tracking-wide">AI Vision Accuracy</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-white font-mono">41+</div>
+                <div className="text-xs text-zinc-500 mt-0.5 tracking-wide">Platform Tests Passing</div>
               </div>
             </div>
           </div>
 
-          {/* Right Column: High-Fidelity Product Console Preview */}
-          <div className="lg:col-span-6 w-full">
-            <div className="relative rounded-2xl bg-[#111113] border border-white/[0.12] shadow-2xl shadow-black/80 overflow-hidden">
-              {/* Console Window Header */}
-              <div className="px-5 py-3.5 bg-[#17171a] border-b border-white/[0.08] flex items-center justify-between">
+          {/* ═══════════════════════════════════════
+              RIGHT COLUMN — Product Console
+          ═══════════════════════════════════════ */}
+          <div className="relative">
+            {/* Ambient glow behind console */}
+            <div className="absolute -inset-10 bg-[#3867FF]/10 blur-[80px] rounded-full pointer-events-none" />
+
+            <div className="relative console-panel shadow-2xl shadow-black">
+              {/* Top bar */}
+              <div className="console-topbar">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-rose-500/80" />
-                  <div className="w-3 h-3 rounded-full bg-amber-500/80" />
-                  <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
-                  <span className="text-xs font-mono text-zinc-400 ml-2">
-                    console.returnproof.app/session/rp-9482
+                  <div className="w-3 h-3 rounded-full bg-rose-500/70" />
+                  <div className="w-3 h-3 rounded-full bg-amber-500/70" />
+                  <div className="w-3 h-3 rounded-full bg-emerald-500/70" />
+                  <span className="text-xs font-mono text-zinc-400 ml-3">
+                    console.returnproof.app / session / rp-9482
                   </span>
                 </div>
-                <VerificationBadge label="Live Chain Active" />
+                <div className="flex items-center gap-1.5 text-xs text-[#20C997] font-mono">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#20C997] animate-pulse" />
+                  Live Chain Active
+                </div>
               </div>
 
-              {/* Order Meta Header */}
-              <div className="p-5 sm:p-6 bg-[#141417] border-b border-white/[0.06] flex flex-wrap items-center justify-between gap-4">
+              {/* Order header */}
+              <div className="p-5 bg-[#141418] border-b border-white/[0.06] flex items-center justify-between gap-4">
                 <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono font-bold text-[#5e85ff] bg-[#3867FF]/15 px-2 py-0.5 rounded border border-[#3867FF]/30">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-[11px] font-mono font-bold text-[#5e85ff] bg-[#3867FF]/12 px-2 py-0.5 rounded border border-[#3867FF]/25">
                       SESSION #RP-9482
                     </span>
-                    <span className="text-xs text-zinc-400">
-                      Dec 18, 2026 • 14:32:09 UTC
-                    </span>
+                    <span className="text-[11px] text-zinc-500 font-mono">Dec 18, 2026</span>
                   </div>
-                  <h3 className="text-lg font-semibold text-white mt-1">
+                  <div className="text-base font-semibold text-white">
                     Sony WH-1000XM5 Wireless Headphones
-                  </h3>
-                  <p className="text-xs text-zinc-400">
-                    Buyer: Alex C. (Verified) • Merchant: Apex Audio Direct
-                  </p>
+                  </div>
+                  <div className="text-xs text-zinc-500 mt-0.5">
+                    Buyer: Alex C. · Merchant: Apex Audio Direct
+                  </div>
                 </div>
-
-                <div className="text-right">
-                  <span className="text-xs text-zinc-400 block">Trust Score</span>
-                  <span className="text-2xl font-bold font-mono text-[#20C997]">
-                    99.4%
-                  </span>
+                <div className="text-right shrink-0">
+                  <div className="text-xs text-zinc-500 font-mono">Trust Score</div>
+                  <div className="text-2xl font-bold font-mono text-[#20C997]">99.4%</div>
                 </div>
               </div>
 
-              {/* Stepper Tabs */}
-              <div className="grid grid-cols-3 bg-[#0d0d10] border-b border-white/[0.08] text-xs font-medium">
-                <button
-                  onClick={() => setActiveStep(1)}
-                  className={`py-3 px-3 flex items-center justify-center gap-1.5 transition-all ${
-                    activeStep === 1
-                      ? "bg-[#18181d] text-white border-b-2 border-[#3867FF]"
-                      : "text-zinc-500 hover:text-zinc-300"
-                  }`}
-                >
-                  <span className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] flex items-center justify-center font-bold">
-                    ✓
-                  </span>
-                  <span>1. Dispatch</span>
-                </button>
-
-                <button
-                  onClick={() => setActiveStep(2)}
-                  className={`py-3 px-3 flex items-center justify-center gap-1.5 transition-all ${
-                    activeStep === 2
-                      ? "bg-[#18181d] text-white border-b-2 border-[#3867FF]"
-                      : "text-zinc-500 hover:text-zinc-300"
-                  }`}
-                >
-                  <span className="w-4 h-4 rounded-full bg-[#3867FF] text-white text-[10px] flex items-center justify-center font-bold">
-                    2
-                  </span>
-                  <span>2. Unboxing</span>
-                </button>
-
-                <button
-                  onClick={() => setActiveStep(3)}
-                  className={`py-3 px-3 flex items-center justify-center gap-1.5 transition-all ${
-                    activeStep === 3
-                      ? "bg-[#18181d] text-white border-b-2 border-[#3867FF]"
-                      : "text-zinc-500 hover:text-zinc-300"
-                  }`}
-                >
-                  <span className="w-4 h-4 rounded-full bg-zinc-800 text-zinc-400 text-[10px] flex items-center justify-center font-bold">
-                    3
-                  </span>
-                  <span>3. Return</span>
-                </button>
+              {/* Step tabs */}
+              <div className="grid grid-cols-3 bg-[#0c0c0f] border-b border-white/[0.06]">
+                {steps.map((step, i) => {
+                  const idx = i + 1;
+                  const isActive = activeStep === idx;
+                  const isDone = idx < activeStep;
+                  return (
+                    <button
+                      key={step}
+                      onClick={() => setActiveStep(idx)}
+                      className={`py-2.5 px-3 flex items-center justify-center gap-2 text-xs font-medium transition-all ${
+                        isActive
+                          ? "bg-[#16161c] text-white border-b-2 border-[#3867FF]"
+                          : "text-zinc-500 hover:text-zinc-300"
+                      }`}
+                    >
+                      <span
+                        className={`w-4 h-4 rounded-full text-[10px] flex items-center justify-center font-bold ${
+                          isDone
+                            ? "bg-[#20C997]/20 text-[#20C997]"
+                            : isActive
+                            ? "bg-[#3867FF] text-white"
+                            : "bg-zinc-800 text-zinc-500"
+                        }`}
+                      >
+                        {isDone ? "✓" : idx}
+                      </span>
+                      {idx}. {step}
+                    </button>
+                  );
+                })}
               </div>
 
-              {/* Console Body: Live Inspection Viewfinder */}
-              <div className="p-5 sm:p-6 space-y-5 bg-[#0f0f12]">
-                {/* Viewfinder Screen */}
-                <div className="relative w-full h-56 sm:h-64 rounded-xl bg-[#08080a] border border-white/10 overflow-hidden flex flex-col justify-between p-4 bg-dark-grid">
-                  {/* Top viewfinder overlay */}
-                  <div className="flex items-center justify-between text-xs font-mono">
-                    <span className="flex items-center gap-1.5 text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                      AI VISION SCAN ACTIVE
+              {/* Main content area */}
+              <div className="p-5 bg-[#0e0e12] space-y-4">
+                {/* Viewfinder */}
+                <div className="relative w-full h-52 rounded-xl bg-[#060609] border border-white/[0.08] overflow-hidden bg-dark-grid">
+                  {/* Scan line animation */}
+                  <div className="scan-line" />
+
+                  {/* Top HUD */}
+                  <div className="absolute top-3 inset-x-3 flex items-center justify-between text-[11px] font-mono z-10">
+                    <span className="flex items-center gap-1.5 text-[#20C997] bg-emerald-950/60 px-2 py-1 rounded border border-emerald-500/25">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#20C997] animate-pulse" />
+                      AI SCAN ACTIVE
                     </span>
-                    <span className="text-zinc-400">4K • 60 FPS • RAW_EVIDENCE</span>
+                    <span className="text-zinc-400">4K · 60fps · RAW</span>
                   </div>
 
-                  {/* Center Scanning Target with Bounding Box */}
-                  <div className="absolute inset-0 m-auto w-48 h-32 sm:w-56 sm:h-36 rounded-lg border-2 border-dashed border-[#3867FF] bg-[#3867FF]/5 flex flex-col items-center justify-center p-2 backdrop-blur-[1px]">
-                    <div className="w-full flex justify-between text-[10px] font-mono text-[#7ba2ff] px-1">
-                      <span>OBJ: RETAIL_BOX</span>
-                      <span>CONF: 99.8%</span>
-                    </div>
-                    <div className="my-auto text-center">
-                      <span className="text-xs font-mono font-semibold text-white bg-black/60 px-2 py-1 rounded border border-white/15">
+                  {/* Bounding box target */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-44 h-28 border-2 border-dashed border-[#3867FF]/70 rounded-lg bg-[#3867FF]/[0.04] flex flex-col items-center justify-center gap-2 p-3">
+                      <div className="flex justify-between w-full text-[10px] font-mono text-[#7ba2ff]">
+                        <span>OBJ: RETAIL_BOX</span>
+                        <span>CONF: 99.8%</span>
+                      </div>
+                      <span className="text-xs font-mono text-white bg-black/60 px-2 py-0.5 rounded border border-white/10">
                         SN: 7492-X902-WH5
                       </span>
-                    </div>
-                    <div className="w-full text-right text-[10px] font-mono text-[#20C997]">
-                      SEAL: INTACT [PASS]
+                      <span className="text-[10px] font-mono text-[#20C997] self-end">
+                        SEAL: INTACT [PASS]
+                      </span>
                     </div>
                   </div>
 
-                  {/* Bottom Viewfinder Info */}
-                  <div className="flex items-end justify-between z-10 text-xs font-mono text-zinc-400">
-                    <span>GPS: 37.7749° N, 122.4194° W</span>
+                  {/* Bottom HUD */}
+                  <div className="absolute bottom-3 inset-x-3 flex justify-between text-[11px] font-mono text-zinc-500 z-10">
+                    <span>GPS: 37.7749°N, 122.4194°W</span>
                     <span className="text-[#3867FF]">EXIF_VERIFIED</span>
                   </div>
                 </div>
 
-                {/* Evidence Hash Seal Bar */}
-                <div className="p-3 rounded-lg bg-[#151518] border border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
-                    <svg
-                      className="w-4 h-4 text-[#3867FF]"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
+                {/* SHA-256 seal row */}
+                <div className="flex items-center justify-between p-3 rounded-xl bg-[#111115] border border-white/[0.06] font-mono text-xs">
+                  <div className="flex items-center gap-2 text-zinc-400">
+                    <svg className="w-3.5 h-3.5 text-[#3867FF]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                     </svg>
-                    <span className="text-xs font-mono text-zinc-300">
-                      SHA-256 Digest:
-                    </span>
-                    <span className="text-xs font-mono text-[#85a8ff] truncate max-w-[180px] sm:max-w-[260px]">
-                      a3f892c90e14bf27a059...f92b
-                    </span>
+                    <span>SHA-256:</span>
+                    <span className="text-[#85a8ff]">a3f892c90e14bf27a059...f92b</span>
                   </div>
-                  <Badge variant="success" size="sm" className="max-w-fit">
-                    Immutable Record
-                  </Badge>
+                  <span className="text-[#20C997] font-semibold">Immutable</span>
                 </div>
 
-                {/* Inspection Findings Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
-                  <div className="p-2.5 rounded-lg bg-[#131316] border border-white/[0.06]">
-                    <span className="text-[11px] text-zinc-400 block">Factory Seal</span>
-                    <span className="text-xs font-semibold text-emerald-400">
-                      ✓ Tamper-Free
-                    </span>
+                {/* Step-specific status */}
+                <div className="p-3 rounded-xl bg-[#111115] border border-white/[0.06] space-y-1.5">
+                  <div className="text-[11px] font-mono text-zinc-500">{content.label}</div>
+                  <div className="text-xs text-zinc-300">{content.status}</div>
+                  <div className={`text-xs font-mono font-semibold ${content.findingColor}`}>
+                    {content.finding}
                   </div>
-                  <div className="p-2.5 rounded-lg bg-[#131316] border border-white/[0.06]">
-                    <span className="text-[11px] text-zinc-400 block">Serial Match</span>
-                    <span className="text-xs font-semibold text-emerald-400">
-                      ✓ 100% Verified
-                    </span>
-                  </div>
-                  <div className="p-2.5 rounded-lg bg-[#131316] border border-white/[0.06]">
-                    <span className="text-[11px] text-zinc-400 block">Cosmetic State</span>
-                    <span className="text-xs font-semibold text-white">
-                      Pristine (Grade A)
-                    </span>
-                  </div>
-                  <div className="p-2.5 rounded-lg bg-[#131316] border border-white/[0.06]">
-                    <span className="text-[11px] text-zinc-400 block">Accessories</span>
-                    <span className="text-xs font-semibold text-[#85a8ff]">
-                      4 of 4 Detected
-                    </span>
-                  </div>
+                </div>
+
+                {/* Quick metrics grid */}
+                <div className="grid grid-cols-4 gap-2">
+                  {[
+                    { label: "Factory Seal", val: "✓ Intact", color: "text-[#20C997]" },
+                    { label: "Serial Match", val: "✓ 100%", color: "text-[#20C997]" },
+                    { label: "Condition", val: "Grade A", color: "text-white" },
+                    { label: "Accessories", val: "4 / 4", color: "text-[#85a8ff]" },
+                  ].map((m) => (
+                    <div key={m.label} className="p-2 rounded-lg bg-[#0c0c0f] border border-white/[0.05] text-center">
+                      <div className="text-[10px] text-zinc-500 leading-none mb-1">{m.label}</div>
+                      <div className={`text-[11px] font-semibold leading-none ${m.color}`}>{m.val}</div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

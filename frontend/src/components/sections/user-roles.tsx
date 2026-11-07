@@ -1,125 +1,142 @@
 import React from "react";
-import { SectionHeading } from "@/components/ui/section-heading";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export function UserRoles() {
   const buyerFeatures = [
-    "Zero-app mobile unboxing capture via secure web link",
-    "Instant cryptographic certificate of delivered package condition",
-    "Clear, undeniable proof if carrier delivers damaged or empty box",
+    "60-second guided unboxing capture via secure web link — no app required",
+    "Cryptographic certificate of delivered package condition",
+    "Clear proof if carrier delivers damaged or empty packaging",
     "72-hour faster refund approval from participating merchants",
-    "Privacy-first media handling with encrypted access",
+    "Privacy-first: encrypted media, no third-party data sharing",
   ];
 
   const merchantFeatures = [
-    "Pre-dispatch serialization and tamper-seal baseline creation",
+    "Dispatch serialization and tamper-seal baseline before carrier pickup",
     "Stop fraudulent box swaps, wardrobing, and missing accessory claims",
-    "Automated AI visual comparison highlights defects in seconds",
-    "One-click dispute evidence bundles formatted for Stripe and PayPal",
-    "Integrates seamlessly with Shopify, WooCommerce, and custom ERPs",
+    "Automated AI visual diff highlights discrepancies in under 10 seconds",
+    "One-click dispute packages formatted for Stripe, PayPal, and Shopify",
+    "Shopify app, WooCommerce plugin, and REST API available out of the box",
   ];
 
   return (
-    <section id="workflows" className="w-full py-24 sm:py-32 relative bg-[#09090b]">
-      <div className="site-container">
-        <SectionHeading
-          badge="Two-Sided Protection"
-          badgeVariant="primary"
-          title="Tailored for Both Sides of the Transaction."
-          serifHighlight="Both Sides of the Transaction."
-          subtitle="ReturnProof creates mutual trust. Buyers get rapid refunds for genuine issues; merchants protect inventory and profit margins against fraud."
-          align="center"
-        />
+    <section id="workflows" className="w-full py-24 sm:py-32 bg-[#09090b] border-t border-white/[0.05]">
+      <div className="pw">
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Card 1: For Buyers */}
-          <Card className="flex flex-col justify-between bg-[#111114] border-white/[0.08] hover:border-[#20C997]/30 transition-all p-2 sm:p-4">
-            <CardHeader>
-              <div className="flex items-center justify-between mb-4">
-                <Badge variant="success" size="sm" className="font-mono">
-                  CUSTOMER EXPERIENCE
-                </Badge>
-                <span className="text-xs text-zinc-400 font-mono">
-                  Self-Service Mobile Flow
+        {/* ── Header ── */}
+        <div className="mb-14">
+          <div className="eyebrow mb-5">Two-Sided Protection</div>
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+            <h2 className="text-4xl sm:text-5xl xl:text-6xl font-bold text-white tracking-tight leading-[1.08] max-w-2xl">
+              Tailored for{" "}
+              <span className="serif-accent gradient-text-blue">
+                Both Sides of the Transaction.
+              </span>
+            </h2>
+            <p className="text-base xl:text-lg text-zinc-400 leading-relaxed max-w-sm text-left lg:text-right pb-1">
+              Buyers get rapid refunds for genuine issues. Merchants protect inventory and margins against fraud.
+            </p>
+          </div>
+        </div>
+
+        {/* ── Two wide panels side by side ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+          {/* Customer Panel */}
+          <div className="bg-[#111115] border border-white/[0.08] rounded-2xl overflow-hidden hover:border-[#20C997]/30 transition-colors duration-300">
+            {/* Top accent */}
+            <div className="h-0.5 bg-gradient-to-r from-[#20C997]/60 via-[#20C997]/30 to-transparent" />
+
+            <div className="p-8 xl:p-10 flex flex-col h-full">
+              {/* Role badge */}
+              <div className="flex items-center justify-between mb-6">
+                <span className="eyebrow eyebrow-green">Customer Experience</span>
+                <span className="text-xs font-mono text-zinc-500 bg-white/[0.03] border border-white/[0.07] px-2 py-1 rounded-lg">
+                  Self-Service Mobile
                 </span>
               </div>
 
-              <CardTitle className="text-2xl sm:text-3xl font-bold text-white">
-                Protected Deliveries. Zero Doubt.
-              </CardTitle>
+              {/* Headline */}
+              <h3 className="text-2xl xl:text-3xl font-bold text-white leading-tight mb-4">
+                Protected Deliveries.
+                <br />
+                Zero Doubt.
+              </h3>
 
-              <CardDescription className="text-zinc-400 leading-relaxed mt-2 text-base">
+              <p className="text-[15px] xl:text-base text-zinc-400 leading-relaxed mb-8">
                 Record your unboxing in under 60 seconds with guided AI prompts.
-                Never worry about getting blamed for transit damage, broken seals,
-                or missing contents.
-              </CardDescription>
-            </CardHeader>
+                Never worry about being blamed for transit damage, broken seals,
+                or missing contents you never received.
+              </p>
 
-            <CardContent className="space-y-6">
-              <ul className="space-y-3">
-                {buyerFeatures.map((item, index) => (
-                  <li key={index} className="flex items-start gap-3 text-sm text-zinc-300">
-                    <span className="w-5 h-5 rounded-full bg-[#20C997]/15 text-[#20C997] flex items-center justify-center text-xs font-bold mt-0.5 shrink-0">
+              {/* Feature list */}
+              <ul className="space-y-3.5 flex-1">
+                {buyerFeatures.map((f, i) => (
+                  <li key={i} className="flex items-start gap-3 text-sm xl:text-[15px] text-zinc-300">
+                    <span className="w-5 h-5 rounded-full bg-[#20C997]/12 border border-[#20C997]/25 flex items-center justify-center text-[#20C997] text-xs font-bold shrink-0 mt-0.5">
                       ✓
                     </span>
-                    <span>{item}</span>
+                    {f}
                   </li>
                 ))}
               </ul>
 
-              <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between">
-                <span className="text-xs text-zinc-400">
+              {/* Footer */}
+              <div className="mt-8 pt-6 border-t border-white/[0.06] flex items-center justify-between gap-4">
+                <span className="text-xs text-zinc-500">
                   Included free on all ReturnProof merchant orders.
                 </span>
                 <Link href="#verification-engine">
                   <Button variant="secondary" size="sm">
-                    View Demo Unbox
+                    View Demo →
                   </Button>
                 </Link>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          {/* Card 2: For Merchants */}
-          <Card className="flex flex-col justify-between bg-[#111114] border-white/[0.08] hover:border-[#3867FF]/40 transition-all p-2 sm:p-4">
-            <CardHeader>
-              <div className="flex items-center justify-between mb-4">
-                <Badge variant="primary" size="sm" className="font-mono">
-                  MERCHANT OPERATIONS
-                </Badge>
-                <span className="text-xs text-zinc-400 font-mono">
-                  Warehouse & Logistics Suite
+          {/* Merchant Panel */}
+          <div className="bg-[#111115] border border-white/[0.08] rounded-2xl overflow-hidden hover:border-[#3867FF]/40 transition-colors duration-300">
+            {/* Top accent */}
+            <div className="h-0.5 bg-gradient-to-r from-[#3867FF]/60 via-[#3867FF]/30 to-transparent" />
+
+            <div className="p-8 xl:p-10 flex flex-col h-full">
+              {/* Role badge */}
+              <div className="flex items-center justify-between mb-6">
+                <span className="eyebrow">Merchant Operations</span>
+                <span className="text-xs font-mono text-zinc-500 bg-white/[0.03] border border-white/[0.07] px-2 py-1 rounded-lg">
+                  Warehouse & Logistics
                 </span>
               </div>
 
-              <CardTitle className="text-2xl sm:text-3xl font-bold text-white">
-                Shield Revenue. Defeat Return Abuse.
-              </CardTitle>
+              {/* Headline */}
+              <h3 className="text-2xl xl:text-3xl font-bold text-white leading-tight mb-4">
+                Shield Revenue.
+                <br />
+                Defeat Return Abuse.
+              </h3>
 
-              <CardDescription className="text-zinc-400 leading-relaxed mt-2 text-base">
-                Eliminate the $100B return fraud problem. Verify serialized
-                identities, compare dispatch against return state, and generate
-                court-ready dispute packages automatically.
-              </CardDescription>
-            </CardHeader>
+              <p className="text-[15px] xl:text-base text-zinc-400 leading-relaxed mb-8">
+                Eliminate the \$100B return fraud problem. Verify serialized identities,
+                compare dispatch against return state, and generate court-ready dispute
+                packages automatically — without touching a keyboard.
+              </p>
 
-            <CardContent className="space-y-6">
-              <ul className="space-y-3">
-                {merchantFeatures.map((item, index) => (
-                  <li key={index} className="flex items-start gap-3 text-sm text-zinc-300">
-                    <span className="w-5 h-5 rounded-full bg-[#3867FF]/15 text-[#6c91ff] flex items-center justify-center text-xs font-bold mt-0.5 shrink-0">
+              {/* Feature list */}
+              <ul className="space-y-3.5 flex-1">
+                {merchantFeatures.map((f, i) => (
+                  <li key={i} className="flex items-start gap-3 text-sm xl:text-[15px] text-zinc-300">
+                    <span className="w-5 h-5 rounded-full bg-[#3867FF]/12 border border-[#3867FF]/25 flex items-center justify-center text-[#6c91ff] text-xs font-bold shrink-0 mt-0.5">
                       ✓
                     </span>
-                    <span>{item}</span>
+                    {f}
                   </li>
                 ))}
               </ul>
 
-              <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between">
-                <span className="text-xs text-zinc-400">
+              {/* Footer */}
+              <div className="mt-8 pt-6 border-t border-white/[0.06] flex items-center justify-between gap-4">
+                <span className="text-xs text-zinc-500">
                   API, Webhook & Shopify App ready.
                 </span>
                 <Link href="#cta">
@@ -128,8 +145,8 @@ export function UserRoles() {
                   </Button>
                 </Link>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </div>
     </section>

@@ -6,114 +6,104 @@ import { Button } from "@/components/ui/button";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const navLinks = [
-    { name: "How It Works", href: "#how-it-works" },
-    { name: "Features", href: "#features" },
-    { name: "Verification Engine", href: "#verification-engine" },
-    { name: "Security & Trust", href: "#security" },
-    { name: "Workflows", href: "#workflows" },
+    { label: "How It Works", href: "#how-it-works" },
+    { label: "Features", href: "#features" },
+    { label: "Verification", href: "#verification-engine" },
+    { label: "Security", href: "#security" },
+    { label: "API Docs", href: "http://localhost:8000/docs" },
   ];
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "py-3 bg-[#080808]/85 backdrop-blur-xl border-b border-white/[0.08]" : "py-5 bg-transparent"
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? "bg-[#060608]/90 backdrop-blur-xl border-b border-white/[0.07]"
+          : "bg-transparent"
       }`}
     >
-      <div className="site-header-container flex items-center justify-between">
-        {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-3 group focus:outline-none">
-          <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-[#3867FF] to-[#20C997] p-[1.5px] transition-transform duration-300 group-hover:scale-105 shadow-[0_0_20px_rgba(56,103,255,0.4)]">
-            <div className="w-full h-full bg-[#0c0c0e] rounded-[10px] flex items-center justify-center">
-              <svg
-                className="w-5 h-5 text-white transition-colors group-hover:text-[#527bff]"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                <path d="m9 12 2 2 4-4" />
-              </svg>
-            </div>
+      <div className="pw-header flex items-center justify-between h-16">
+
+        {/* ── LEFT: Logo ── */}
+        <Link href="/" className="flex items-center gap-3 shrink-0 group">
+          <div
+            className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+            style={{
+              background: "linear-gradient(135deg, #3867FF 0%, #20C997 100%)",
+              boxShadow: "0 0 18px rgba(56,103,255,0.5)",
+            }}
+          >
+            <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              <path d="m9 12 2 2 4-4" />
+            </svg>
           </div>
-          <div className="flex flex-col">
-            <div className="flex items-center gap-1.5">
-              <span className="font-bold text-lg tracking-tight text-white group-hover:text-zinc-200 transition-colors">
-                ReturnProof
-              </span>
-              <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-white/10 text-zinc-300 border border-white/10">
-                v2.0
-              </span>
+          <div>
+            <div className="text-[15px] font-bold text-white tracking-tight leading-none">
+              ReturnProof
             </div>
-            <span className="text-[10px] text-zinc-400 font-medium tracking-wide hidden sm:inline-block">
+            <div className="text-[10px] text-zinc-500 tracking-wide mt-0.5 font-medium hidden sm:block">
               Chain-of-Custody Protocol
-            </span>
+            </div>
           </div>
         </Link>
 
-        {/* Center Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-1 px-4 py-1.5 rounded-full glass-nav shadow-lg shadow-black/20">
+        {/* ── CENTER: Nav Links ── */}
+        <nav className="hidden lg:flex items-center gap-1">
           {navLinks.map((link) => (
-            <Link
-              key={link.name}
+            <a
+              key={link.label}
               href={link.href}
-              className="px-4 py-2 text-sm font-medium text-zinc-400 hover:text-white rounded-full transition-colors hover:bg-white/[0.06]"
+              target={link.href.startsWith("http") ? "_blank" : undefined}
+              rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+              className="px-4 py-2 text-sm font-medium text-zinc-400 hover:text-white rounded-lg transition-colors hover:bg-white/[0.05]"
             >
-              {link.name}
-            </Link>
+              {link.label}
+            </a>
           ))}
         </nav>
 
-        {/* Right Action Area */}
-        <div className="hidden sm:flex items-center gap-4">
-          {/* Real-time Health Indicator */}
-          <div className="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08]">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#20C997] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#20C997]"></span>
+        {/* ── RIGHT: Status + Actions ── */}
+        <div className="flex items-center gap-3 shrink-0">
+          {/* Live status indicator */}
+          <div className="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.07] text-xs font-mono text-zinc-400">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute h-full w-full rounded-full bg-[#20C997] opacity-75" />
+              <span className="relative rounded-full h-1.5 w-1.5 bg-[#20C997]" />
             </span>
-            <span className="text-xs font-mono text-zinc-300">API: Active</span>
+            API Online
           </div>
 
-          <Link href="#verification-engine">
-            <Button variant="secondary" size="sm" className="hidden md:inline-flex">
-              Explore Engine
+          <Link href="#cta" className="hidden md:block">
+            <Button variant="ghost" size="sm" className="text-zinc-300">
+              Log in
             </Button>
           </Link>
 
           <Link href="#cta">
-            <Button variant="primary" size="sm" className="font-semibold shadow-lg">
+            <Button
+              variant="primary"
+              size="sm"
+              className="font-semibold shadow-[0_0_20px_rgba(56,103,255,0.4)]"
+            >
               Get Started
             </Button>
           </Link>
-        </div>
 
-        {/* Mobile Menu Button */}
-        <div className="flex sm:hidden items-center gap-2">
-          <Link href="#cta">
-            <Button variant="primary" size="sm">
-              Get Started
-            </Button>
-          </Link>
+          {/* Mobile hamburger */}
           <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-lg bg-white/[0.06] border border-white/10 text-zinc-300 hover:text-white"
-            aria-label="Toggle Navigation Menu"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="lg:hidden p-2 rounded-lg text-zinc-300 hover:text-white hover:bg-white/[0.05]"
           >
-            {mobileMenuOpen ? (
+            {mobileOpen ? (
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
@@ -126,29 +116,25 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Dropdown Menu */}
-      {mobileMenuOpen && (
-        <div className="sm:hidden px-4 pt-4 pb-6 mt-3 bg-[#0d0d10] border-b border-white/10 flex flex-col space-y-3 shadow-2xl animate-in slide-in-from-top-2">
+      {/* Mobile dropdown */}
+      {mobileOpen && (
+        <div className="lg:hidden border-t border-white/[0.07] bg-[#080808] px-6 py-4 flex flex-col gap-1">
           {navLinks.map((link) => (
-            <Link
-              key={link.name}
+            <a
+              key={link.label}
               href={link.href}
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 text-base font-medium text-zinc-300 hover:text-white rounded-lg hover:bg-white/[0.06] transition-colors"
+              onClick={() => setMobileOpen(false)}
+              className="py-2.5 text-sm text-zinc-300 hover:text-white"
             >
-              {link.name}
-            </Link>
+              {link.label}
+            </a>
           ))}
-          <div className="pt-3 border-t border-white/10 flex flex-col space-y-2">
-            <Link href="#verification-engine" onClick={() => setMobileMenuOpen(false)}>
-              <Button variant="secondary" size="md" className="w-full">
-                Interactive Engine
-              </Button>
+          <div className="pt-3 border-t border-white/[0.07] flex gap-2">
+            <Link href="#cta" className="flex-1" onClick={() => setMobileOpen(false)}>
+              <Button variant="secondary" size="md" className="w-full">Log in</Button>
             </Link>
-            <Link href="#cta" onClick={() => setMobileMenuOpen(false)}>
-              <Button variant="primary" size="md" className="w-full">
-                Get Started Free
-              </Button>
+            <Link href="#cta" className="flex-1" onClick={() => setMobileOpen(false)}>
+              <Button variant="primary" size="md" className="w-full">Get Started</Button>
             </Link>
           </div>
         </div>
