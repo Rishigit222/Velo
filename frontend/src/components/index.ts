@@ -1,13 +1,9 @@
-export * from "./ui/button";
-export * from "./ui/badge";
-export * from "./ui/card";
-export * from "./ui/input";
-export * from "./ui/navbar";
-export * from "./ui/footer";
-export * from "./ui/section-heading";
-export * from "./sections/hero";
-export * from "./sections/how-it-works";
-export * from "./sections/features";
-export * from "./sections/custody-simulator";
-export * from "./sections/tech-stack";
-export * from "./sections/cta-section";
+/**
+ * ReturnProof UI Component Exports
+ * Ready for clean rebuild matching Devnovate design inspiration.
+ */
+
+// UI primitives will be exported here
+// Layout components will be exported here
+// Section components will be exported here
+export {};

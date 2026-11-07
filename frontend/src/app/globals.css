@@ -1,56 +1,12 @@
 @import "tailwindcss";
 
-html {
-  scroll-behavior: smooth;
-  width: 100%;
-  overflow-x: hidden;
-}
-
 :root {
   --background: #ffffff;
-  --foreground: #0f172a;
+  --foreground: #09090b;
 }
 
 body {
-  width: 100%;
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
   background-color: var(--background);
   color: var(--foreground);
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-}
-
-/* Full-width responsive site containers as requested */
-.site-container {
-  width: 100%;
-  max-width: 1720px;
-  margin-inline: auto;
-  padding-inline: clamp(20px, 3vw, 64px);
-  box-sizing: border-box;
-}
-
-.site-header-container {
-  width: 100%;
-  max-width: 1840px;
-  margin-inline: auto;
-  padding-inline: clamp(20px, 3vw, 64px);
-  box-sizing: border-box;
-}
-
-/* Subtle dot grid pattern matching reference SaaS aesthetics */
-.bg-grid-pattern {
-  background-image: radial-gradient(rgba(148, 163, 184, 0.22) 1px, transparent 1px);
-  background-size: 24px 24px;
-}
-
-/* Soft ambient mesh glow across full viewport */
-.bg-ambient-glow {
-  background: radial-gradient(
-    circle at 50% 0%,
-    rgba(219, 234, 254, 0.8) 0%,
-    rgba(238, 242, 255, 0.5) 35%,
-    transparent 70%
-  );
 }
