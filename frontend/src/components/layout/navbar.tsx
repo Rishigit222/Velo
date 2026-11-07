@@ -26,7 +26,7 @@ export function Navbar() {
     <header
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-[#060608]/90 backdrop-blur-xl border-b border-white/[0.07]"
+          ? "bg-[#0A0A0C]/85 backdrop-blur-xl border-b border-white/[0.08]"
           : "bg-transparent"
       }`}
     >
@@ -34,23 +34,17 @@ export function Navbar() {
 
         {/* ── LEFT: Logo ── */}
         <Link href="/" className="flex items-center gap-3 shrink-0 group">
-          <div
-            className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-            style={{
-              background: "linear-gradient(135deg, #3867FF 0%, #20C997 100%)",
-              boxShadow: "0 0 18px rgba(56,103,255,0.5)",
-            }}
-          >
-            <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+          <div className="w-8 h-8 rounded-lg bg-[#1E1E22] border border-white/[0.12] flex items-center justify-center shrink-0 shadow-sm transition-colors group-hover:border-white/25">
+            <svg className="w-4 h-4 text-[#E5E5E5]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
               <path d="m9 12 2 2 4-4" />
             </svg>
           </div>
           <div>
-            <div className="text-[15px] font-bold text-white tracking-tight leading-none">
+            <div className="text-[15px] font-semibold text-white tracking-tight leading-none">
               ReturnProof
             </div>
-            <div className="text-[10px] text-zinc-500 tracking-wide mt-0.5 font-medium hidden sm:block">
+            <div className="text-[10px] text-[#777777] tracking-wider mt-0.5 font-medium hidden sm:block">
               Chain-of-Custody Protocol
             </div>
           </div>
@@ -64,7 +58,7 @@ export function Navbar() {
               href={link.href}
               target={link.href.startsWith("http") ? "_blank" : undefined}
               rel={link.href.startsWith("http") ? "noreferrer" : undefined}
-              className="px-4 py-2 text-sm font-medium text-zinc-400 hover:text-white rounded-lg transition-colors hover:bg-white/[0.05]"
+              className="px-3.5 py-1.5 text-sm font-medium text-[#A3A3A3] hover:text-white rounded-lg transition-colors hover:bg-white/[0.04]"
             >
               {link.label}
             </a>
@@ -74,16 +68,15 @@ export function Navbar() {
         {/* ── RIGHT: Status + Actions ── */}
         <div className="flex items-center gap-3 shrink-0">
           {/* Live status indicator */}
-          <div className="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.07] text-xs font-mono text-zinc-400">
+          <div className="hidden xl:flex items-center gap-2 px-3 py-1 rounded-full bg-[#141416] border border-white/[0.08] text-xs font-mono text-[#A3A3A3]">
             <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute h-full w-full rounded-full bg-[#20C997] opacity-75" />
-              <span className="relative rounded-full h-1.5 w-1.5 bg-[#20C997]" />
+              <span className="relative rounded-full h-1.5 w-1.5 bg-[#49B99A]" />
             </span>
             API Online
           </div>
 
           <Link href="#cta" className="hidden md:block">
-            <Button variant="ghost" size="sm" className="text-zinc-300">
+            <Button variant="ghost" size="sm" className="text-[#A3A3A3] hover:text-white">
               Log in
             </Button>
           </Link>
@@ -92,7 +85,7 @@ export function Navbar() {
             <Button
               variant="primary"
               size="sm"
-              className="font-semibold shadow-[0_0_20px_rgba(56,103,255,0.4)]"
+              className="font-medium"
             >
               Get Started
             </Button>
@@ -101,7 +94,8 @@ export function Navbar() {
           {/* Mobile hamburger */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden p-2 rounded-lg text-zinc-300 hover:text-white hover:bg-white/[0.05]"
+            className="lg:hidden p-2 rounded-lg text-[#A3A3A3] hover:text-white hover:bg-white/[0.05]"
+            aria-label="Toggle navigation menu"
           >
             {mobileOpen ? (
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -118,18 +112,18 @@ export function Navbar() {
 
       {/* Mobile dropdown */}
       {mobileOpen && (
-        <div className="lg:hidden border-t border-white/[0.07] bg-[#080808] px-6 py-4 flex flex-col gap-1">
+        <div className="lg:hidden border-t border-white/[0.08] bg-[#0E0E10] px-6 py-4 flex flex-col gap-1">
           {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
               onClick={() => setMobileOpen(false)}
-              className="py-2.5 text-sm text-zinc-300 hover:text-white"
+              className="py-2.5 text-sm text-[#A3A3A3] hover:text-white"
             >
               {link.label}
             </a>
           ))}
-          <div className="pt-3 border-t border-white/[0.07] flex gap-2">
+          <div className="pt-3 border-t border-white/[0.08] flex gap-2">
             <Link href="#cta" className="flex-1" onClick={() => setMobileOpen(false)}>
               <Button variant="secondary" size="md" className="w-full">Log in</Button>
             </Link>

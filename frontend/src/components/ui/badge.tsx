@@ -30,19 +30,19 @@ export function Badge({
 
   const variantStyles = {
     default:
-      "bg-white/[0.06] border-white/10 text-zinc-300 hover:border-white/20",
+      "bg-white/[0.05] border-white/[0.09] text-[#B5B5B5] hover:border-white/20",
     outline:
-      "bg-transparent border-white/15 text-zinc-300 hover:border-white/25",
+      "bg-transparent border-white/[0.12] text-[#B5B5B5] hover:border-white/25",
     primary:
-      "bg-[#3867FF]/15 border-[#3867FF]/35 text-[#85a6ff] shadow-[0_0_12px_rgba(56,103,255,0.2)]",
+      "bg-white/[0.08] border-white/20 text-[#D4D4D4]",
     success:
-      "bg-[#20C997]/15 border-[#20C997]/35 text-[#5ee3bc] shadow-[0_0_12px_rgba(32,201,151,0.2)]",
+      "bg-[#49B99A]/10 border-[#49B99A]/25 text-[#49B99A]",
     warning:
-      "bg-[#F59E0B]/15 border-[#F59E0B]/35 text-[#fbbf24] shadow-[0_0_12px_rgba(245,158,11,0.2)]",
+      "bg-[#E5A83B]/10 border-[#E5A83B]/25 text-[#E5A83B]",
     danger:
-      "bg-rose-500/15 border-rose-500/35 text-rose-300 shadow-[0_0_12px_rgba(244,63,94,0.2)]",
+      "bg-rose-500/10 border-rose-500/25 text-rose-300",
     muted:
-      "bg-zinc-800/60 border-zinc-700/50 text-zinc-400",
+      "bg-[#1A1A1A] border-white/[0.06] text-[#777777]",
   };
 
   return (
@@ -65,11 +65,11 @@ export function VerificationBadge({
   return (
     <Badge
       variant="success"
-      className={cn("bg-[#20C997]/10 text-[#20C997] border-[#20C997]/30", className)}
+      className={cn("bg-[#49B99A]/10 text-[#49B99A] border-[#49B99A]/25", className)}
     >
-      <span className="relative flex h-2 w-2">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#20C997] opacity-75"></span>
-        <span className="relative inline-flex rounded-full h-2 w-2 bg-[#20C997]"></span>
+      <span className="relative flex h-1.5 w-1.5">
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#49B99A] opacity-75"></span>
+        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#49B99A]"></span>
       </span>
       <span>{label}</span>
     </Badge>
@@ -90,13 +90,13 @@ export function HashBadge({
     <Badge
       variant="default"
       className={cn(
-        "font-mono text-[11px] bg-[#111111] border-white/10 text-zinc-400 gap-1.5",
+        "font-mono text-[11px] bg-[#141414] border-white/[0.08] text-[#A3A3A3] gap-1.5",
         className
       )}
       title={hash}
     >
       <svg
-        className="w-3 h-3 text-[#3867FF]"
+        className="w-3 h-3 text-[#D4D4D4]"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -105,7 +105,7 @@ export function HashBadge({
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
       </svg>
       <span>SHA-256:</span>
-      <span className="text-zinc-200">{shortHash}</span>
+      <span className="text-[#F5F5F5]">{shortHash}</span>
     </Badge>
   );
 }
@@ -156,4 +156,3 @@ export function StatusBadge({
       );
   }
 }
-

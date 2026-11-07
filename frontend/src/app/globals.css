@@ -5,22 +5,26 @@ html {
   width: 100%;
   overflow-x: hidden;
   background-color: #080808;
-  color: #ffffff;
+  color: #F5F5F5;
 }
 
 :root {
   --background: #080808;
-  --foreground: #ffffff;
-  --accent-blue: #3867FF;
-  --accent-green: #20C997;
-  --accent-amber: #F59E0B;
-  --surface-1: #111111;
-  --surface-2: #171717;
-  --surface-3: #202020;
-  --text-muted: #A1A1AA;
-  --border-subtle: rgba(255, 255, 255, 0.07);
-  --border-normal: rgba(255, 255, 255, 0.12);
-  --page-padding: clamp(20px, 3vw, 60px);
+  --foreground: #F5F5F5;
+  --surface-base: #0B0B0B;
+  --surface-secondary: #111111;
+  --surface-card: #191919;
+  --surface-elevated: #202020;
+  --surface-highlight: #262626;
+  --text-primary: #FFFFFF;
+  --text-secondary: #A3A3A3;
+  --text-muted: #777777;
+  --accent-silver: #D4D4D4;
+  --accent-blue: #5278FF;
+  --accent-green: #49B99A;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-medium: rgba(255, 255, 255, 0.13);
+  --page-padding: clamp(20px, 3.5vw, 64px);
 }
 
 body {
@@ -30,37 +34,27 @@ body {
   padding: 0;
   overflow-x: hidden;
   background-color: #080808;
-  color: #ffffff;
+  color: #F5F5F5;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  selection-background-color: rgba(212, 212, 212, 0.2);
 }
 
 /* =====================================================
    FULL-WIDTH PAGE SECTION SYSTEM
-   No max-width on sections — content fills the viewport.
-   Only padding creates breathing room.
    ===================================================== */
 
-/* Full-width section wrapper — used directly on <section> tags */
 .pw {
   width: 100%;
   padding-inline: var(--page-padding);
   box-sizing: border-box;
 }
 
-/* Narrow container for text-only blocks that benefit from max-width */
-.pw-text {
-  width: 100%;
-  max-width: 760px;
-}
-
-/* Full-width header bar */
 .pw-header {
   width: 100%;
   padding-inline: var(--page-padding);
   box-sizing: border-box;
 }
 
-/* Legacy compatibility — kept for footer and existing references */
 .site-container {
   width: 100%;
   padding-inline: var(--page-padding);
@@ -74,45 +68,55 @@ body {
 }
 
 /* =====================================================
-   DARK AESTHETICS & AMBIENT EFFECTS
+   DEVNOVATE ATMOSPHERIC BACKGROUND GRADIENTS & LIGHTING
+   (Soft silver and charcoal ambient illumination)
    ===================================================== */
 
-.dark-hero-glow {
+.charcoal-hero-glow {
   background:
-    radial-gradient(ellipse 60% 50% at 70% 50%, rgba(56, 103, 255, 0.14) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 60% at 10% 60%, rgba(32, 201, 151, 0.07) 0%, transparent 70%);
+    radial-gradient(ellipse 65% 55% at 75% 20%, rgba(200, 200, 200, 0.11) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 20% 75%, rgba(120, 120, 120, 0.07) 0%, transparent 60%),
+    linear-gradient(180deg, #080808 0%, #0E0E0E 45%, #080808 100%);
 }
 
-.dark-section-glow {
-  background: radial-gradient(
-    ellipse 70% 60% at 50% 50%,
-    rgba(56, 103, 255, 0.07) 0%,
-    transparent 65%
-  );
+.charcoal-section-glow {
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(180, 180, 180, 0.06) 0%, transparent 60%),
+    linear-gradient(180deg, #090909 0%, #0D0D0D 100%);
 }
 
+.charcoal-card-glow {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255, 255, 255, 0.05) 0%, transparent 60%),
+    #191919;
+}
+
+/* Glass navigation bar */
 .glass-nav {
-  background: rgba(10, 10, 12, 0.85);
+  background: rgba(14, 14, 16, 0.75);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.card-dark {
-  background-color: #171717;
-  border: 1px solid rgba(255, 255, 255, 0.07);
+/* Devnovate card surfaces */
+.card-charcoal {
+  background-color: #191919;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-charcoal:hover {
+  background-color: #1E1E1E;
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 14px 40px -10px rgba(0, 0, 0, 0.6);
 }
 
 .card-elevated {
   background-color: #202020;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-/* Subtle grid line accents */
-.bg-dark-grid {
-  background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-  background-size: 48px 48px;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.65);
 }
 
 /* =====================================================
@@ -125,38 +129,15 @@ body {
   font-weight: 400;
 }
 
-.gradient-text-blue {
-  background: linear-gradient(135deg, #507dff 0%, #8bb0ff 60%, #20C997 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.gradient-text-green {
-  background: linear-gradient(135deg, #20C997 0%, #5ee3bc 100%);
+.silver-gradient-text {
+  background: linear-gradient(135deg, #FFFFFF 0%, #E0E0E0 50%, #A3A3A3 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 /* =====================================================
-   SECTION DIVIDERS
-   ===================================================== */
-
-.section-divider {
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(
-    to right,
-    transparent 0%,
-    rgba(255, 255, 255, 0.08) 20%,
-    rgba(255, 255, 255, 0.08) 80%,
-    transparent 100%
-  );
-}
-
-/* =====================================================
-   BADGE & EYEBROW LABEL
+   BADGES & PILLS (Restrained, silver & subtle)
    ===================================================== */
 
 .eyebrow {
@@ -165,30 +146,31 @@ body {
   gap: 8px;
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 5px 14px;
-  border-radius: 100px;
-  border: 1px solid rgba(56, 103, 255, 0.35);
-  background: rgba(56, 103, 255, 0.1);
-  color: #85a6ff;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: #D4D4D4;
 }
 
 .eyebrow-green {
-  border-color: rgba(32, 201, 151, 0.35);
-  background: rgba(32, 201, 151, 0.1);
-  color: #5ee3bc;
+  border-color: rgba(73, 185, 154, 0.3);
+  background: rgba(73, 185, 154, 0.08);
+  color: #49B99A;
 }
 
 /* =====================================================
-   INTERFACE / CONSOLE PANELS
+   PRODUCT CONSOLE INTERFACE STYLES (Clean SaaS, not HUD)
    ===================================================== */
 
 .console-panel {
-  background: #0d0d10;
+  background: #141414;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
+  border-radius: 18px;
   overflow: hidden;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
 }
 
 .console-topbar {
@@ -196,31 +178,6 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 12px 20px;
-  background: #131318;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-}
-
-/* =====================================================
-   ANIMATIONS
-   ===================================================== */
-
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.85); }
-}
-
-@keyframes scan-line {
-  0% { transform: translateY(-100%); opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { transform: translateY(400%); opacity: 0; }
-}
-
-.scan-line {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(to right, transparent, rgba(56, 103, 255, 0.6), transparent);
-  animation: scan-line 3s linear infinite;
+  background: #1A1A1A;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }

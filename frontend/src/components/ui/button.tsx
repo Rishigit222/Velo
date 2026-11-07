@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline" | "ghost" | "emerald";
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "accent" | "emerald";
   size?: "sm" | "md" | "lg";
   isLoading?: boolean;
 }
@@ -26,21 +26,23 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variantStyles = {
       primary:
-        "bg-[#3867FF] text-white hover:bg-[#2d56e6] focus:ring-[#3867FF] shadow-[0_0_24px_rgba(56,103,255,0.35)] hover:shadow-[0_0_32px_rgba(56,103,255,0.5)] border border-[#3867FF]/60",
+        "bg-white text-[#0a0a0a] hover:bg-[#eaeaea] font-semibold border border-white/90 shadow-[0_2px_12px_rgba(255,255,255,0.12)] focus:ring-white/40",
       secondary:
-        "bg-[#1c1c1f] text-white hover:bg-[#26262b] border border-white/10 hover:border-white/20 focus:ring-white/20",
+        "bg-[#181818] text-white hover:bg-[#242424] border border-white/[0.12] hover:border-white/25 focus:ring-white/20",
       outline:
-        "border border-white/15 bg-transparent hover:bg-white/5 hover:border-white/30 text-white focus:ring-white/20",
+        "border border-white/[0.12] bg-transparent hover:bg-white/[0.06] hover:border-white/25 text-white focus:ring-white/20",
       ghost:
-        "bg-transparent hover:bg-white/5 text-zinc-400 hover:text-white",
+        "bg-transparent hover:bg-white/[0.06] text-[#A3A3A3] hover:text-white",
+      accent:
+        "bg-[#5278FF] text-white hover:bg-[#4168ee] border border-[#5278FF]/40 shadow-[0_2px_14px_rgba(82,120,255,0.25)] focus:ring-[#5278FF]",
       emerald:
-        "bg-[#20C997] text-[#080808] font-semibold hover:bg-[#1bb888] focus:ring-[#20C997] shadow-[0_0_24px_rgba(32,201,151,0.35)]",
+        "bg-[#49B99A]/15 text-[#49B99A] border border-[#49B99A]/30 hover:bg-[#49B99A]/25 font-semibold focus:ring-[#49B99A]",
     };
 
     const sizeStyles = {
       sm: "h-9 px-3.5 text-xs gap-1.5",
       md: "h-11 px-5 text-sm gap-2",
-      lg: "h-13 px-7 text-base gap-2.5",
+      lg: "h-12 px-7 text-sm sm:text-base gap-2.5",
     };
 
     return (
@@ -79,4 +81,3 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 
 Button.displayName = "Button";
-

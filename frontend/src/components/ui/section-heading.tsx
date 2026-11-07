@@ -30,7 +30,7 @@ export function SectionHeading({
     renderedTitle = (
       <>
         {parts[0]}
-        <span className="font-[family-name:var(--font-serif)] italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-[#507dff] via-[#82a4ff] to-[#20C997]">
+        <span className="font-[family-name:var(--font-serif)] italic font-normal silver-gradient-text">
           {serifHighlight}
         </span>
         {parts.slice(1).join(serifHighlight)}
@@ -67,7 +67,7 @@ export function SectionHeading({
       {subtitle && (
         <p
           className={cn(
-            "text-base sm:text-lg md:text-xl text-zinc-400 font-normal leading-relaxed",
+            "text-base sm:text-lg md:text-xl text-[#A3A3A3] font-normal leading-relaxed",
             isCentered ? "max-w-2xl" : "max-w-2xl"
           )}
         >
@@ -77,4 +77,3 @@ export function SectionHeading({
     </div>
   );
 }
-
