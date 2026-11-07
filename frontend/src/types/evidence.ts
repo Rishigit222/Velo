@@ -64,15 +64,52 @@ export interface VerificationResult {
   human_review_required?: boolean;
 }
 
+export type DisputeStatus = "open" | "under_review" | "resolved" | "rejected";
+
+export type DisputeReason =
+  | "Product returned damaged"
+  | "Missing accessories"
+  | "Product identity mismatch"
+  | "Packaging issue"
+  | "Incorrect return"
+  | "Other";
+
 export interface Dispute {
   id: number;
   order_id: number;
   raised_by: number;
   dispute_reason: string;
   description: string;
-  status: string;
+  status: DisputeStatus | string;
   created_at: string;
   updated_at: string;
+  order?: import("./order").Order;
+}
+
+export interface DisputeCreateInput {
+  order_id: number;
+  dispute_reason: string;
+  description: string;
+}
+
+export interface DisputeUpdateInput {
+  status?: string;
+  description?: string;
+}
+
+export interface EvidenceReportSummary {
+  order_id: number;
+  order_number: string;
+  product_name: string;
+  total_amount: number;
+  order_status: string;
+  delivery_session?: EvidenceSession | null;
+  return_session?: EvidenceSession | null;
+  total_files: number;
+  has_condition_report: boolean;
+  is_audit_valid: boolean;
+  dispute_count: number;
+  latest_event_at: string;
 }
 
 export interface AuditLog {
