@@ -99,6 +99,16 @@ class EvidenceSession(Base):
         foreign_keys="VerificationResult.return_session_id",
     )
 
+    @property
+    def status(self) -> str:
+        """Alias for session_status for standard client schema compatibility."""
+        return self.session_status
+
+    @property
+    def updated_at(self) -> datetime:
+        """Completed or created timestamp."""
+        return self.completed_at or self.created_at
+
     def __repr__(self) -> str:
         return f"<EvidenceSession id={self.id} order_id={self.order_id} type='{self.session_type}' status='{self.session_status}'>"
 

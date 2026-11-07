@@ -375,8 +375,17 @@ The backend is configured with strict, origin-validated CORS settings:
 | **Orders** | `GET /api/v1/orders/{id}` | **LIVE** | Single order details |
 | **Orders** | `PUT /api/v1/orders/{id}` | **LIVE** | Update permitted fields |
 | **Orders** | `PATCH /api/v1/orders/{id}/status` | **LIVE** | State transition |
-| **Evidence** | `POST /api/v1/evidence/sessions` | *Upcoming (Step 5)* | Database tables & schemas ready |
-| **Evidence** | `POST /api/v1/evidence/upload` | *Upcoming (Step 5)* | Storage & hashing ready |
+| **Evidence** | `POST /api/v1/evidence/sessions` | **LIVE** | Initiate delivery/return session |
+| **Evidence** | `GET /api/v1/evidence/sessions` | **LIVE** | List role-scoped sessions |
+| **Evidence** | `GET /api/v1/evidence/sessions/{session_id}` | **LIVE** | Session details & files |
+| **Evidence** | `PATCH /api/v1/evidence/sessions/{session_id}/status` | **LIVE** | Active/Completed/Cancelled status |
+| **Evidence** | `POST /api/v1/evidence/sessions/{session_id}/files` | **LIVE** | Upload evidence (JPEG/PNG/WebP/MP4/WebM) |
+| **Evidence** | `GET /api/v1/evidence/sessions/{session_id}/files` | **LIVE** | List session media files |
+| **Evidence** | `GET /api/v1/evidence/files/{file_id}` | **LIVE** | File metadata & SHA-256 hash |
+| **Evidence** | `GET /api/v1/evidence/files/{file_id}/download` | **LIVE** | Authorized media stream download |
+| **Evidence** | `POST /api/v1/evidence/sessions/{session_id}/condition` | **LIVE** | Condition & packaging report |
+| **Evidence** | `GET /api/v1/evidence/sessions/{session_id}/condition` | **LIVE** | List session condition reports |
+| **Audit** | `GET /api/v1/evidence/audit/verify` | **LIVE** | Cryptographic audit chain verification |
 | **Verification**| `POST /api/v1/verification/run` | *Upcoming (Step 6)* | Verification tables ready |
 | **Disputes** | `POST /api/v1/disputes` | *Upcoming (Step 7)* | Dispute tables ready |
 
@@ -631,6 +640,61 @@ export async function updateOrderStatus(
     method: "PATCH",
     body: JSON.stringify({ status }),
   });
+}
+
+// ==========================================
+// Evidence & Chain-of-Custody APIs (Step 5)
+// ==========================================
+
+export async function createEvidenceSession(payload: {
+  order_id: number;
+  session_type: "delivery" | "return";
+}): Promise<any> {
+  return apiRequest("/evidence/sessions", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function getEvidenceSession(sessionId: number): Promise<any> {
+  return apiRequest(`/evidence/sessions/${sessionId}`);
+}
+
+export async function uploadEvidenceFiles(
+  sessionId: number,
+  files: File[]
+): Promise<any> {
+  const formData = new FormData();
+  files.forEach((file) => formData.append("files", file));
+
+  const token = tokenStorage.get();
+  const res = await fetch(`${API_BASE_URL}/evidence/sessions/${sessionId}/files`, {
+    method: "POST",
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    body: formData,
+  });
+  if (!res.ok) throw new Error("File upload failed");
+  return res.json();
+}
+
+export async function submitConditionReport(
+  sessionId: number,
+  payload: {
+    product_condition: string;
+    damage_description?: string;
+    packaging_condition?: string;
+    accessories_status?: string;
+    additional_notes?: string;
+  }
+): Promise<any> {
+  return apiRequest(`/evidence/sessions/${sessionId}/condition`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function verifyAuditChain(orderId?: number): Promise<any> {
+  return apiRequest(orderId ? `/evidence/audit/verify?order_id=${orderId}` : "/evidence/audit/verify");
 }
 ```
 

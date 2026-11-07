@@ -29,6 +29,7 @@ htmlcov/
 .idea/
 
 # Uploads
+uploads/
 backend/uploads/*
 !backend/uploads/.gitkeep
 

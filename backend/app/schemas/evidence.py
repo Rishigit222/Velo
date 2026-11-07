@@ -22,9 +22,10 @@ class SessionStatusEnum(str, Enum):
 class EvidenceFileBase(BaseModel):
     file_name: str = Field(..., max_length=255)
     file_type: str = Field(..., max_length=100)
-    file_path: str = Field(..., max_length=500)
+    file_path: Optional[str] = Field(None, max_length=500, description="Virtual or relative storage path")
     file_hash: str = Field(..., min_length=64, max_length=64, description="SHA-256 hash")
     file_size: int = Field(..., gt=0)
+    download_url: Optional[str] = None
 
 
 class EvidenceFileCreate(EvidenceFileBase):
@@ -47,10 +48,11 @@ class ConditionReportBase(BaseModel):
     damage_description: Optional[str] = None
     accessories_status: Optional[str] = Field(None, max_length=100)
     packaging_condition: Optional[str] = Field(None, max_length=100)
+    additional_notes: Optional[str] = None
 
 
 class ConditionReportCreate(ConditionReportBase):
-    session_id: int
+    session_id: Optional[int] = None
 
 
 class ConditionReportResponse(ConditionReportBase):
@@ -73,13 +75,20 @@ class EvidenceSessionCreate(BaseModel):
     session_type: SessionTypeEnum = SessionTypeEnum.DELIVERY
 
 
+class EvidenceSessionStatusUpdate(BaseModel):
+    status: Optional[SessionStatusEnum] = None
+    session_status: Optional[SessionStatusEnum] = None
+
+
 class EvidenceSessionResponse(EvidenceSessionBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
+    status: Optional[str] = None
     created_by: Optional[int] = None
     created_at: datetime
     completed_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
     files: List[EvidenceFileResponse] = []
     condition_reports: List[ConditionReportResponse] = []
 
@@ -153,4 +162,12 @@ class AuditLogResponse(AuditLogBase):
 
     id: int
     created_at: datetime
+
+
+class AuditVerificationResponse(BaseModel):
+    is_valid: bool
+    total_records: int
+    verified_records: int
+    tampered_records: List[int] = []
+    errors: List[str] = []
 
