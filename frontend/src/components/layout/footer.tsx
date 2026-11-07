@@ -1,7 +1,17 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function Footer() {
+  const pathname = usePathname();
+
+  // Do not render marketing footer inside dashboard routes
+  if (pathname?.startsWith("/dashboard")) {
+    return null;
+  }
+
   return (
     <footer className="w-full bg-[#060608] border-t border-white/[0.06] text-[#A3A3A3]">
       <div className="pw py-16 xl:py-20">
@@ -39,11 +49,11 @@ export function Footer() {
             <h4 className="text-xs font-semibold text-white uppercase tracking-widest">Platform</h4>
             <ul className="flex flex-col gap-2.5 text-sm">
               {[
-                { label: "Delivery Handover", href: "#how-it-works" },
-                { label: "Unboxing Verification", href: "#how-it-works" },
-                { label: "Condition Comparison", href: "#verification-engine" },
-                { label: "SHA-256 Tamper Records", href: "#features" },
-                { label: "Dispute Evidence Packages", href: "#features" },
+                { label: "Delivery Handover", href: "/#how-it-works" },
+                { label: "Unboxing Verification", href: "/#how-it-works" },
+                { label: "Condition Comparison", href: "/#verification-engine" },
+                { label: "SHA-256 Tamper Records", href: "/#features" },
+                { label: "Dispute Evidence Packages", href: "/#features" },
               ].map((l) => (
                 <li key={l.label}>
                   <Link href={l.href} className="text-[#A3A3A3] hover:text-white transition-colors">
@@ -59,11 +69,11 @@ export function Footer() {
             <h4 className="text-xs font-semibold text-white uppercase tracking-widest">Security</h4>
             <ul className="flex flex-col gap-2.5 text-sm">
               {[
-                { label: "Client-Server Hashing", href: "#security" },
-                { label: "Immutable Audit Ledger", href: "#security" },
-                { label: "AES-256 Media Storage", href: "#security" },
-                { label: "Stratum-1 Atomic NTP", href: "#security" },
-                { label: "Role-Based Access Control", href: "#security" },
+                { label: "Client-Server Hashing", href: "/#security" },
+                { label: "Immutable Audit Ledger", href: "/#security" },
+                { label: "AES-256 Media Storage", href: "/#security" },
+                { label: "Stratum-1 Atomic NTP", href: "/#security" },
+                { label: "Role-Based Access Control", href: "/#security" },
               ].map((l) => (
                 <li key={l.label}>
                   <Link href={l.href} className="text-[#A3A3A3] hover:text-white transition-colors">
@@ -81,9 +91,9 @@ export function Footer() {
               {[
                 { label: "FastAPI Swagger Docs", href: "http://localhost:8000/docs", external: true },
                 { label: "ReDoc API Reference", href: "http://localhost:8000/redoc", external: true },
-                { label: "Evidence Webhooks", href: "#features" },
-                { label: "Client SDK Reference", href: "#workflows" },
-                { label: "Developer Sandbox Key", href: "#cta" },
+                { label: "Evidence Webhooks", href: "/#features" },
+                { label: "Client SDK Reference", href: "/#workflows" },
+                { label: "Developer Sandbox Key", href: "/#cta" },
               ].map((l) => (
                 <li key={l.label}>
                   <a
@@ -107,9 +117,9 @@ export function Footer() {
         <div className="mt-14 pt-7 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#777777]">
           <span>© 2026 ReturnProof Inc. All rights reserved. Cryptographic chain-of-custody platform.</span>
           <div className="flex items-center gap-6">
-            <Link href="#security" className="hover:text-white transition-colors">Privacy</Link>
-            <Link href="#security" className="hover:text-white transition-colors">Terms</Link>
-            <Link href="#security" className="hover:text-white transition-colors">Security Disclosures</Link>
+            <Link href="/#security" className="hover:text-white transition-colors">Privacy</Link>
+            <Link href="/#security" className="hover:text-white transition-colors">Terms</Link>
+            <Link href="/#security" className="hover:text-white transition-colors">Security Disclosures</Link>
           </div>
         </div>
       </div>

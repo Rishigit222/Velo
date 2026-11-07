@@ -1,31 +1,37 @@
 export interface Product {
   id: number;
-  name: string;
-  description: string | null;
-  sku: string;
-  category: string;
-  brand: string | null;
+  product_name: string;
+  name?: string; // backward compat
+  description?: string | null;
+  sku?: string | null;
+  category?: string | null;
+  brand?: string | null;
   price: number;
-  seller_id: number;
+  serial_number?: string | null;
+  seller_id?: number | null;
   created_at: string;
-  updated_at: string;
+  updated_at?: string | null;
 }
 
 export interface ProductCreateRequest {
-  name: string;
+  product_name: string;
   description?: string | null;
-  sku: string;
-  category: string;
+  sku?: string | null;
+  category?: string | null;
   brand?: string | null;
   price: number;
+  serial_number?: string | null;
+  seller_id?: number | null;
 }
 
 export interface ProductUpdateRequest {
-  name?: string;
+  product_name?: string;
   description?: string | null;
-  category?: string;
+  sku?: string | null;
+  category?: string | null;
   brand?: string | null;
   price?: number;
+  serial_number?: string | null;
 }
 
 export interface ProductListFilter {
@@ -35,4 +41,3 @@ export interface ProductListFilter {
   skip?: number;
   limit?: number;
 }
-

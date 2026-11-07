@@ -2,9 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 export function Navbar() {
+  const pathname = usePathname();
+  const { isAuthenticated, user } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -14,11 +18,16 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Do not render marketing navbar inside dashboard routes
+  if (pathname?.startsWith("/dashboard")) {
+    return null;
+  }
+
   const navLinks = [
-    { label: "How It Works", href: "#how-it-works" },
-    { label: "Features", href: "#features" },
-    { label: "Verification", href: "#verification-engine" },
-    { label: "Security", href: "#security" },
+    { label: "How It Works", href: "/#how-it-works" },
+    { label: "Features", href: "/#features" },
+    { label: "Verification", href: "/#verification-engine" },
+    { label: "Security", href: "/#security" },
     { label: "API Docs", href: "http://localhost:8000/docs" },
   ];
 
@@ -75,21 +84,31 @@ export function Navbar() {
             API Online
           </div>
 
-          <Link href="#cta" className="hidden md:block">
-            <Button variant="ghost" size="sm" className="text-[#A3A3A3] hover:text-white">
-              Log in
-            </Button>
-          </Link>
-
-          <Link href="#cta">
-            <Button
-              variant="primary"
-              size="sm"
-              className="font-medium"
-            >
-              Get Started
-            </Button>
-          </Link>
+          {isAuthenticated ? (
+            <Link href="/dashboard">
+              <Button variant="primary" size="sm" className="font-medium gap-2">
+                <span>Dashboard</span>
+                {user?.role && (
+                  <span className="text-[10px] uppercase font-mono px-1.5 py-0.2 rounded bg-black/30 border border-black/20 text-[#0a0a0a]">
+                    {user.role}
+                  </span>
+                )}
+              </Button>
+            </Link>
+          ) : (
+            <>
+              <Link href="/login" className="hidden md:block">
+                <Button variant="ghost" size="sm" className="text-[#A3A3A3] hover:text-white">
+                  Log in
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button variant="primary" size="sm" className="font-medium">
+                  Get Started
+                </Button>
+              </Link>
+            </>
+          )}
 
           {/* Mobile hamburger */}
           <button
@@ -124,12 +143,20 @@ export function Navbar() {
             </a>
           ))}
           <div className="pt-3 border-t border-white/[0.08] flex gap-2">
-            <Link href="#cta" className="flex-1" onClick={() => setMobileOpen(false)}>
-              <Button variant="secondary" size="md" className="w-full">Log in</Button>
-            </Link>
-            <Link href="#cta" className="flex-1" onClick={() => setMobileOpen(false)}>
-              <Button variant="primary" size="md" className="w-full">Get Started</Button>
-            </Link>
+            {isAuthenticated ? (
+              <Link href="/dashboard" className="w-full" onClick={() => setMobileOpen(false)}>
+                <Button variant="primary" size="md" className="w-full">Dashboard</Button>
+              </Link>
+            ) : (
+              <>
+                <Link href="/login" className="flex-1" onClick={() => setMobileOpen(false)}>
+                  <Button variant="secondary" size="md" className="w-full">Log in</Button>
+                </Link>
+                <Link href="/register" className="flex-1" onClick={() => setMobileOpen(false)}>
+                  <Button variant="primary" size="md" className="w-full">Get Started</Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}
