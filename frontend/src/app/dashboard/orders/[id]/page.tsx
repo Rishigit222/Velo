@@ -6,6 +6,7 @@ import { orderService } from "@/services/orderService";
 import { Order, OrderStatus } from "@/types";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { EvidenceWorkspace } from "@/components/evidence/evidence-workspace";
 
 function OrderDetailContent({
   params,
@@ -176,11 +177,28 @@ function OrderDetailContent({
           </h1>
         </div>
 
-        <Link href="/dashboard/orders">
-          <Button variant="secondary" size="sm" className="text-xs">
-            ← Back to Orders
-          </Button>
-        </Link>
+        <div className="flex flex-wrap items-center gap-2.5">
+          <Link href={`/dashboard/verification?order_id=${order.id}`}>
+            <Button variant="outline" size="sm" className="text-xs border-[#3867FF]/30 text-[#88A8FF] hover:bg-[#3867FF]/10">
+              AI Verification →
+            </Button>
+          </Link>
+          <Link href={`/dashboard/disputes/new?order_id=${order.id}`}>
+            <Button variant="outline" size="sm" className="text-xs border-[#D4A359]/30 text-[#D4A359] hover:bg-[#D4A359]/10">
+              File Dispute
+            </Button>
+          </Link>
+          <Link href={`/dashboard/reports?order_id=${order.id}`}>
+            <Button variant="outline" size="sm" className="text-xs border-white/[0.1] text-white hover:bg-white/[0.08]">
+              PDF Report
+            </Button>
+          </Link>
+          <Link href="/dashboard/orders">
+            <Button variant="secondary" size="sm" className="text-xs">
+              ← Orders
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Success Notification */}
@@ -400,6 +418,11 @@ function OrderDetailContent({
           </div>
         </div>
       </div>
+
+      {/* ═══════════════════════════════════════
+          IMMUTABLE EVIDENCE CAPTURE & CUSTODY WORKSPACE
+      ═══════════════════════════════════════ */}
+      <EvidenceWorkspace order={order} />
     </div>
   );
 }

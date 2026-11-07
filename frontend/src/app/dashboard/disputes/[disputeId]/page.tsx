@@ -492,3 +492,4 @@ export default function DisputeDetailsPage({ params }: DisputeDetailsPageProps) 
     </div>
   );
 }
+

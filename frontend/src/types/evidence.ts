@@ -25,6 +25,14 @@ export interface ConditionReport {
   created_at: string;
 }
 
+export interface ConditionReportCreateParams {
+  product_condition: string;
+  damage_description?: string;
+  accessories_status?: string;
+  packaging_condition?: string;
+  additional_notes?: string;
+}
+
 export interface EvidenceSession {
   id: number;
   order_id: number;

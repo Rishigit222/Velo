@@ -59,6 +59,18 @@ export const evidenceService = {
   },
 
   /**
+   * Upload media files (photos/videos) to an active evidence session
+   * Automatically computes SHA-256 digests on the server
+   */
+  async uploadFiles(sessionId: number, files: File[]): Promise<EvidenceFile[]> {
+    const formData = new FormData();
+    files.forEach((file) => {
+      formData.append("files", file);
+    });
+    return apiClient.post<EvidenceFile[]>(`/evidence/sessions/${sessionId}/files`, formData);
+  },
+
+  /**
    * List files for a specific evidence session
    */
   async listFiles(sessionId: number): Promise<EvidenceFile[]> {
