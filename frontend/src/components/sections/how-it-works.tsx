@@ -21,7 +21,7 @@ export function HowItWorks() {
       num: "02",
       tag: "Customer Receipt",
       title: "AI-Assisted Unboxing Capture",
-      desc: "The buyer launches a guided ReturnProof session to record unboxing in real time. Visual verification ensures box seals, serial numbers, and all accessories are captured, hashed, and notarized with atomic UTC timestamps.",
+      desc: "The buyer launches a guided Velo session to record unboxing in real time. Visual verification ensures box seals, serial numbers, and all accessories are captured, hashed, and notarized with atomic UTC timestamps.",
       hash: "a492f1...c890",
       timestamp: "Dec 18, 14:32 UTC",
       status: "UNBOX CERTIFIED",

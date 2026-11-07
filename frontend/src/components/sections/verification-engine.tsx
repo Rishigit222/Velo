@@ -133,7 +133,7 @@ export function VerificationEngine() {
             </div>
 
             <p className="text-base xl:text-lg text-[#A3A3A3] leading-relaxed">
-              ReturnProof cross-references the dispatch baseline against return
+              Velo cross-references the dispatch baseline against return
               intake evidence in seconds — surfacing product swaps, missing accessories,
               and condition discrepancies with verifiable certainty.
             </p>

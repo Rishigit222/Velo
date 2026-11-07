@@ -72,7 +72,7 @@ function LoginForm() {
                   <path d="m9 12 2 2 4-4" />
                 </svg>
               </div>
-              <span className="font-semibold text-lg text-white tracking-tight">ReturnProof</span>
+              <span className="font-semibold text-lg text-white tracking-tight">Velo</span>
             </Link>
 
             <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
@@ -186,7 +186,7 @@ export default function LoginPage() {
     <Suspense
       fallback={
         <div className="min-h-[85vh] flex items-center justify-center bg-[#080808] text-xs font-mono text-[#777777]">
-          Loading ReturnProof Secure Login...
+          Loading Velo Secure Login...
         </div>
       }
     >

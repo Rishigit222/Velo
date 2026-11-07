@@ -81,7 +81,7 @@ export function UserRoles() {
               {/* Footer */}
               <div className="mt-8 pt-6 border-t border-white/[0.06] flex items-center justify-between gap-4">
                 <span className="text-xs text-[#777777]">
-                  Included free on ReturnProof orders.
+                  Included free on Velo orders.
                 </span>
                 <Link href="#verification-engine">
                   <Button variant="secondary" size="sm">

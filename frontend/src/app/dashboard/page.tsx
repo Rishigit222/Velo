@@ -179,7 +179,7 @@ export default function DashboardOverviewPage() {
               Recent Orders
             </h2>
             <p className="text-xs text-[#777777] mt-0.5">
-              Live orders retrieved from the ReturnProof SQLite / Azure SQL backend.
+              Live orders retrieved from the Velo backend.
             </p>
           </div>
           <Link href="/dashboard/orders">

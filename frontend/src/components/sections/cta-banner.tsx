@@ -23,7 +23,7 @@ export function CtaBanner() {
                 <span className="serif-accent silver-gradient-text">Accountable.</span>
               </h2>
               <p className="text-base xl:text-lg text-[#A3A3A3] leading-relaxed mt-5 max-w-lg font-normal">
-                Deploy ReturnProof across your fulfillment operations in under 15 minutes.
+                Deploy Velo across your fulfillment operations in under 15 minutes.
                 Protect margins, eliminate false damage claims, and build unshakeable
                 customer trust with cryptographic evidence.
               </p>
@@ -34,7 +34,7 @@ export function CtaBanner() {
                   "Developer Sandbox Ready",
                   "SHA-256 Tamper Evident",
                   "FastAPI & REST Compliant",
-                  "41 Automated Tests Passing",
+                  "72 Automated Tests Passing",
                 ].map((g) => (
                   <span key={g} className="flex items-center gap-1.5">
                     <span className="text-[#49B99A]">✓</span> {g}

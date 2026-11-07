@@ -907,7 +907,7 @@ function VerificationDashboardContent() {
 
           <p className="text-xs text-[#A3A3A3] leading-relaxed">
             {verificationResult?.findings ||
-              "When comparison runs against the Step 6 verification engine, algorithmic findings will highlight detected discrepancies. Both evidence sessions remain tamper-evident and anchored to the ReturnProof digital ledger."}
+              "When comparison runs against the Step 6 verification engine, algorithmic findings will highlight detected discrepancies. Both evidence sessions remain tamper-evident and anchored to the Velo digital ledger."}
           </p>
 
           <div className="pt-3 border-t border-white/[0.04] flex flex-wrap items-center gap-4 text-xs font-mono">

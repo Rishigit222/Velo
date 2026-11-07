@@ -127,7 +127,7 @@ function DashboardShell({
                 <path d="m9 12 2 2 4-4" />
               </svg>
             </div>
-            <span className="font-semibold text-sm text-white tracking-tight">ReturnProof</span>
+            <span className="font-semibold text-sm text-white tracking-tight">Velo</span>
           </Link>
 
           <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-white/[0.06] border border-white/[0.08] text-[#D4D4D4]">
@@ -219,7 +219,7 @@ function DashboardShell({
               <path d="m9 12 2 2 4-4" />
             </svg>
           </div>
-          <span className="font-semibold text-sm text-white">ReturnProof</span>
+          <span className="font-semibold text-sm text-white">Velo</span>
         </Link>
 
         <div className="flex items-center gap-2">

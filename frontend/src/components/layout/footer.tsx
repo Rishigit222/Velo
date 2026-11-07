@@ -28,7 +28,7 @@ export function Footer() {
                   <path d="m9 12 2 2 4-4" />
                 </svg>
               </div>
-              <span className="font-semibold text-lg text-white tracking-tight">ReturnProof</span>
+              <span className="font-semibold text-lg text-white tracking-tight">Velo</span>
             </Link>
 
             <p className="text-sm text-[#777777] leading-relaxed">
@@ -115,7 +115,7 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-14 pt-7 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#777777]">
-          <span>© 2026 ReturnProof Inc. All rights reserved. Cryptographic chain-of-custody platform.</span>
+          <span>© 2026 Velo Technologies Inc. All rights reserved. Cryptographic chain-of-custody platform.</span>
           <div className="flex items-center gap-6">
             <Link href="/#security" className="hover:text-white transition-colors">Privacy</Link>
             <Link href="/#security" className="hover:text-white transition-colors">Terms</Link>

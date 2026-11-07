@@ -51,7 +51,7 @@ export function Navbar() {
           </div>
           <div>
             <div className="text-[15px] font-semibold text-white tracking-tight leading-none">
-              ReturnProof
+              Velo
             </div>
             <div className="text-[10px] text-[#777777] tracking-wider mt-0.5 font-medium hidden sm:block">
               Chain-of-Custody Protocol

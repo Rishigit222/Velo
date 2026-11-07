@@ -83,14 +83,14 @@ function RegisterForm() {
                   <path d="m9 12 2 2 4-4" />
                 </svg>
               </div>
-              <span className="font-semibold text-lg text-white tracking-tight">ReturnProof</span>
+              <span className="font-semibold text-lg text-white tracking-tight">Velo</span>
             </Link>
 
             <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
               Create your account
             </h1>
             <p className="text-sm text-[#A3A3A3] mt-2">
-              Join ReturnProof to verify shipments, packages, and returns.
+              Join Velo to verify shipments, packages, and returns.
             </p>
           </div>
 
@@ -247,7 +247,7 @@ export default function RegisterPage() {
     <Suspense
       fallback={
         <div className="min-h-[85vh] flex items-center justify-center bg-[#080808] text-xs font-mono text-[#777777]">
-          Loading ReturnProof Registration...
+          Loading Velo Registration...
         </div>
       }
     >

@@ -76,7 +76,7 @@ export function Hero() {
 
             {/* Description */}
             <p className="text-lg xl:text-xl text-[#A3A3A3] leading-relaxed max-w-lg font-normal">
-              ReturnProof cryptographically records, verifies, and locks product
+              Velo cryptographically records, verifies, and locks product
               condition across dispatch, unboxing, and returns — stopping false
               damage claims and return fraud before they happen.
             </p>
@@ -142,7 +142,7 @@ export function Hero() {
                   <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
                   <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
                   <span className="text-xs text-[#777777] ml-2 font-mono">
-                    console.returnproof.app / session / rp-9482
+                    console.velo.app / session / rp-9482
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5 text-xs text-[#D4D4D4] font-medium">

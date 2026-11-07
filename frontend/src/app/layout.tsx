@@ -23,7 +23,7 @@ const serifFont = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "ReturnProof — Digital Chain-of-Custody for Deliveries & Returns",
+  title: "Velo — Digital Chain-of-Custody for Deliveries & Returns",
   description:
     "Protect every delivery and return with verifiable cryptographic evidence, secure media capture, and intelligent AI product condition verification.",
 };

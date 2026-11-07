@@ -72,3 +72,4 @@ backend/tests/test_reports.py: 6 passed
 - **`docs/DISPUTE_REPORT_API.md`**: Dispute Management & PDF Evidence Report specification with request/response schemas, state transition diagrams, and cURL examples.
 - **`docs/FRONTEND_INTEGRATION.md`**: Complete integration guide with TypeScript API client covering all endpoints.
 - **`README.md`**: Project overview, architectural diagram, installation steps, and endpoint reference.
+

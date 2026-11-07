@@ -1,0 +1,206 @@
+[
+  {
+    "feature": "Backend Health Probe",
+    "status": "PASS",
+    "details": "Status: healthy, DB: connected",
+    "error": ""
+  },
+  {
+    "feature": "Frontend Landing Probe",
+    "status": "PASS",
+    "details": "HTTP 200 OK",
+    "error": ""
+  },
+  {
+    "feature": "Buyer Registration",
+    "status": "PASS",
+    "details": "Registered User #9 (buyer_0c220b@example.com)",
+    "error": ""
+  },
+  {
+    "feature": "Buyer Login & JWT Issuance",
+    "status": "PASS",
+    "details": "JWT token acquired (length 208)",
+    "error": ""
+  },
+  {
+    "feature": "Seller Registration",
+    "status": "PASS",
+    "details": "Registered User #10 (seller_0c220b@example.com)",
+    "error": ""
+  },
+  {
+    "feature": "Seller Login & JWT Issuance",
+    "status": "PASS",
+    "details": "JWT token acquired (length 212)",
+    "error": ""
+  },
+  {
+    "feature": "Invalid Credentials Rejection",
+    "status": "PASS",
+    "details": "Correctly returned HTTP 401",
+    "error": ""
+  },
+  {
+    "feature": "Protected Route /auth/me Authorization Check",
+    "status": "PASS",
+    "details": "Blocked unauthenticated request with 401",
+    "error": ""
+  },
+  {
+    "feature": "Authenticated Profile Retrieval",
+    "status": "PASS",
+    "details": "Role resolved: buyer",
+    "error": ""
+  },
+  {
+    "feature": "Product Creation by Seller",
+    "status": "PASS",
+    "details": "Product #5 (SKU: SKU-0C220B) created",
+    "error": ""
+  },
+  {
+    "feature": "Product Creation RBAC (Buyer Forbidden)",
+    "status": "PASS",
+    "details": "Buyer correctly blocked from creating products (403)",
+    "error": ""
+  },
+  {
+    "feature": "Product Retrieval & Filtering",
+    "status": "PASS",
+    "details": "Retrieved product SKU-0C220B",
+    "error": ""
+  },
+  {
+    "feature": "Order Creation by Buyer",
+    "status": "PASS",
+    "details": "Order #6 (ORD-20261107-40D4F9) created",
+    "error": ""
+  },
+  {
+    "feature": "Order Details Retrieval (Buyer)",
+    "status": "PASS",
+    "details": "Status: pending",
+    "error": ""
+  },
+  {
+    "feature": "Order Details Retrieval (Seller)",
+    "status": "PASS",
+    "details": "Seller authorized to view assigned order",
+    "error": ""
+  },
+  {
+    "feature": "Delivery Evidence Session Creation",
+    "status": "PASS",
+    "details": "Session #3 created",
+    "error": ""
+  },
+  {
+    "feature": "Delivery Evidence Photo Upload",
+    "status": "PASS",
+    "details": "File #3 uploaded, SHA-256: 010ce3b59eb02153...",
+    "error": ""
+  },
+  {
+    "feature": "Delivery Condition Report Submission",
+    "status": "PASS",
+    "details": "Condition report persisted",
+    "error": ""
+  },
+  {
+    "feature": "Delivery Session Completion",
+    "status": "PASS",
+    "details": "Status transitioned to completed",
+    "error": ""
+  },
+  {
+    "feature": "Return Evidence Session Creation",
+    "status": "PASS",
+    "details": "Session #4 created",
+    "error": ""
+  },
+  {
+    "feature": "Return Evidence Photo Upload",
+    "status": "PASS",
+    "details": "File #4 uploaded, SHA-256: bc3ca1296119ef2e...",
+    "error": ""
+  },
+  {
+    "feature": "Return Condition Report Submission",
+    "status": "PASS",
+    "details": "Condition report persisted",
+    "error": ""
+  },
+  {
+    "feature": "Return Session Completion",
+    "status": "PASS",
+    "details": "Status transitioned to completed",
+    "error": ""
+  },
+  {
+    "feature": "Private Evidence Access Protection",
+    "status": "PASS",
+    "details": "Non-party user blocked from downloading file with 403",
+    "error": ""
+  },
+  {
+    "feature": "AI Verification Execution",
+    "status": "PARTIAL",
+    "details": "Endpoint POST /api/v1/verification/run returned 404 Not Found (Roadmap item; zero fake/mock scores returned)",
+    "error": ""
+  },
+  {
+    "feature": "Verification Results Retrieval",
+    "status": "PARTIAL",
+    "details": "Endpoint GET /api/v1/verification/history returned 404 (Frontend handles gracefully as empty list)",
+    "error": ""
+  },
+  {
+    "feature": "Dispute Creation by Buyer",
+    "status": "PASS",
+    "details": "Dispute #3 filed (Status: submitted)",
+    "error": ""
+  },
+  {
+    "feature": "Duplicate Active Dispute Prevention",
+    "status": "PASS",
+    "details": "Duplicate claim rejected with 409 Conflict",
+    "error": ""
+  },
+  {
+    "feature": "Dispute Intake Review Transition",
+    "status": "PASS",
+    "details": "Dispute transitioned to 'under_review'",
+    "error": ""
+  },
+  {
+    "feature": "Order Disputes Listing Endpoint",
+    "status": "PASS",
+    "details": "Listed 1 disputes for order #6",
+    "error": ""
+  },
+  {
+    "feature": "ReportLab PDF Report Generation",
+    "status": "PASS",
+    "details": "Report #3 generated, SHA-256: d171262646655cc1...",
+    "error": ""
+  },
+  {
+    "feature": "Authenticated PDF Binary Download",
+    "status": "PASS",
+    "details": "PDF downloaded (7417 bytes, header: %PDF-)",
+    "error": ""
+  },
+  {
+    "feature": "Direct PDF Stream by Order Alias",
+    "status": "PASS",
+    "details": "Direct streamed (7417 bytes)",
+    "error": ""
+  },
+  {
+    "feature": "Cryptographic Hash Chain Integrity",
+    "status": "PASS",
+    "details": "Chain verified: 0 events intact, zero tampering",
+    "error": ""
+  }
+]

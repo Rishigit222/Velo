@@ -47,7 +47,7 @@ export function SecurityTrust() {
             <p className="text-base xl:text-lg text-[#A3A3A3] leading-relaxed">
               Built to the rigorous evidentiary standards demanded by payment
               processors, insurance underwriters, and dispute arbitration panels.
-              ReturnProof applies cryptographic verification at every layer.
+              Velo applies cryptographic verification at every layer.
             </p>
 
             {/* Additional security pillars */}
