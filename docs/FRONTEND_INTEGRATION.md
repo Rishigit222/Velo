@@ -696,6 +696,87 @@ export async function submitConditionReport(
 export async function verifyAuditChain(orderId?: number): Promise<any> {
   return apiRequest(orderId ? `/evidence/audit/verify?order_id=${orderId}` : "/evidence/audit/verify");
 }
+
+// ==========================================
+// Dispute Management APIs (Step 7)
+// ==========================================
+
+export async function createDispute(payload: {
+  order_id: number;
+  dispute_reason:
+    | "Product returned damaged"
+    | "Missing accessories"
+    | "Product identity mismatch"
+    | "Packaging issue"
+    | "Incorrect return"
+    | "Other";
+  description: string;
+}): Promise<any> {
+  return apiRequest("/disputes", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function getDisputes(filters?: {
+  order_id?: number;
+  status?: "submitted" | "under_review" | "resolved" | "rejected";
+}): Promise<any[]> {
+  const params = new URLSearchParams();
+  if (filters?.order_id) params.append("order_id", filters.order_id.toString());
+  if (filters?.status) params.append("status", filters.status);
+  const query = params.toString() ? `?${params.toString()}` : "";
+  return apiRequest<any[]>(`/disputes${query}`);
+}
+
+export async function getDisputeById(disputeId: number): Promise<any> {
+  return apiRequest(`/disputes/${disputeId}`);
+}
+
+export async function updateDisputeStatus(
+  disputeId: number,
+  status: "under_review" | "resolved" | "rejected",
+  resolutionDetails?: string
+): Promise<any> {
+  return apiRequest(`/disputes/${disputeId}/status`, {
+    method: "PATCH",
+    body: JSON.stringify({ status, resolution_details: resolutionDetails }),
+  });
+}
+
+export async function getOrderDisputes(orderId: number): Promise<any[]> {
+  return apiRequest<any[]>(`/orders/${orderId}/disputes`);
+}
+
+// ==========================================
+// PDF Evidence Report APIs (Step 7)
+// ==========================================
+
+export async function generateOrderReport(
+  orderId: number,
+  options?: {
+    report_type?: "evidence_summary" | "full_chain_of_custody" | "dispute_arbitration";
+    include_audit_trail?: boolean;
+    include_disputes?: boolean;
+  }
+): Promise<any> {
+  return apiRequest(`/reports/orders/${orderId}/generate`, {
+    method: "POST",
+    body: JSON.stringify(options || {}),
+  });
+}
+
+export async function getOrderReportMetadata(orderId: number): Promise<any> {
+  return apiRequest(`/reports/orders/${orderId}`);
+}
+
+export function getReportDownloadUrl(reportId: number): string {
+  return `${API_BASE_URL}/reports/${reportId}/download`;
+}
+
+export function getOrderPdfStreamUrl(orderId: number): string {
+  return `${API_BASE_URL}/reports/order/${orderId}/pdf`;
+}
 ```
 
 ---

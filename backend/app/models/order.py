@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from backend.app.models.dispute import Dispute
     from backend.app.models.evidence_session import EvidenceSession
     from backend.app.models.product import Product
+    from backend.app.models.report import Report
     from backend.app.models.user import User
     from backend.app.models.verification_result import VerificationResult
 
@@ -97,6 +98,11 @@ class Order(Base):
     )
     disputes: Mapped[List["Dispute"]] = relationship(
         "Dispute",
+        back_populates="order",
+        cascade="all, delete-orphan",
+    )
+    reports: Mapped[List["Report"]] = relationship(
+        "Report",
         back_populates="order",
         cascade="all, delete-orphan",
     )

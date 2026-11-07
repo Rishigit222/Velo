@@ -118,29 +118,16 @@ class VerificationResultResponse(VerificationResultBase):
 
 
 # Dispute Schemas
-class DisputeBase(BaseModel):
-    order_id: int
-    dispute_reason: str = Field(..., max_length=255)
-    description: str
-
-
-class DisputeCreate(DisputeBase):
-    pass
-
-
-class DisputeUpdate(BaseModel):
-    status: Optional[str] = Field(None, max_length=50)
-    description: Optional[str] = None
-
-
-class DisputeResponse(DisputeBase):
-    model_config = ConfigDict(from_attributes=True)
-
-    id: int
-    raised_by: int
-    status: str
-    created_at: datetime
-    updated_at: datetime
+from backend.app.schemas.dispute import (
+    DisputeBase,
+    DisputeCreate,
+    DisputeDetailResponse,
+    DisputeReasonEnum,
+    DisputeResponse,
+    DisputeStatusEnum,
+    DisputeStatusUpdate,
+    DisputeUpdate,
+)
 
 
 # Audit Log Schemas

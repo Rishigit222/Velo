@@ -2,7 +2,7 @@
 Dispute model for tracking buyer or seller claims and resolution lifecycles.
 """
 from datetime import datetime, timezone
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 from sqlalchemy import DateTime, ForeignKey, Integer, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -33,10 +33,12 @@ class Dispute(Base):
     description: Mapped[str] = mapped_column(Text, nullable=False)
     status: Mapped[str] = mapped_column(
         String(50),
-        default="open",
+        default="submitted",
+        server_default="submitted",
         nullable=False,
         index=True,
     )
+    resolution_details: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc),

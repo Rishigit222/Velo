@@ -9,7 +9,9 @@ from backend.app.database.connection import get_db
 from backend.app.models.order import Order
 from backend.app.models.user import User
 from backend.app.routes.deps import get_current_user
+from backend.app.schemas.dispute import DisputeResponse
 from backend.app.schemas.order import OrderCreate, OrderResponse, OrderStatusUpdate, OrderUpdate
+from backend.app.services.dispute_service import list_disputes
 from backend.app.services.order_service import (
     create_order,
     get_order_for_user,
@@ -106,3 +108,20 @@ def update_order_status(
         new_status=status_update.status,
         current_user=current_user,
     )
+
+
+@router.get(
+    "/{order_id}/disputes",
+    response_model=List[DisputeResponse],
+    summary="List disputes for an order",
+    description="List all disputes filed against a specific order. Enforces order party access control.",
+)
+def get_order_disputes(
+    order_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> List[DisputeResponse]:
+    """Get all disputes for the specified order."""
+    get_order_for_user(db=db, order_id=order_id, current_user=current_user)
+    return list_disputes(db=db, current_user=current_user, order_id=order_id)
+

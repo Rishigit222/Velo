@@ -8,6 +8,7 @@ from backend.app.models.evidence_file import EvidenceFile
 from backend.app.models.evidence_session import EvidenceSession, SessionStatus, SessionType
 from backend.app.models.order import Order
 from backend.app.models.product import Product
+from backend.app.models.report import Report
 from backend.app.models.user import User
 from backend.app.models.verification_result import VerificationResult
 
@@ -20,6 +21,7 @@ __all__ = [
     "ConditionReport",
     "VerificationResult",
     "Dispute",
+    "Report",
     "AuditLog",
     "SessionType",
     "SessionStatus",

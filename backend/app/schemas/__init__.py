@@ -2,14 +2,21 @@
 Pydantic schemas package.
 """
 from backend.app.schemas.auth import LoginRequest, TokenPayload, TokenResponse
+from backend.app.schemas.dispute import (
+    DisputeBase,
+    DisputeCreate,
+    DisputeDetailResponse,
+    DisputeReasonEnum,
+    DisputeResponse,
+    DisputeStatusEnum,
+    DisputeStatusUpdate,
+    DisputeUpdate,
+)
 from backend.app.schemas.evidence import (
     AuditLogCreate,
     AuditLogResponse,
     ConditionReportCreate,
     ConditionReportResponse,
-    DisputeCreate,
-    DisputeResponse,
-    DisputeUpdate,
     EvidenceFileCreate,
     EvidenceFileResponse,
     EvidenceSessionCreate,
@@ -18,6 +25,11 @@ from backend.app.schemas.evidence import (
     SessionTypeEnum,
     VerificationResultCreate,
     VerificationResultResponse,
+)
+from backend.app.schemas.report import (
+    ReportBase,
+    ReportGenerateRequest,
+    ReportResponse,
 )
 from backend.app.schemas.health import HealthResponse, RootResponse
 from backend.app.schemas.order import (
@@ -67,7 +79,14 @@ __all__ = [
     "VerificationResultResponse",
     "DisputeCreate",
     "DisputeUpdate",
+    "DisputeStatusUpdate",
     "DisputeResponse",
+    "DisputeDetailResponse",
+    "DisputeReasonEnum",
+    "DisputeStatusEnum",
+    "ReportBase",
+    "ReportGenerateRequest",
+    "ReportResponse",
     "AuditLogCreate",
     "AuditLogResponse",
 ]
