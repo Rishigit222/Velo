@@ -3,8 +3,8 @@
 **Date:** November 8, 2026  
 **Auditor:** Automated AppSec & Penetration Testing Engine  
 **Target:** Velo (FastAPI Backend + Next.js 16 Frontend)  
-**Scope:** Full-stack architecture, source code audit, authentication, RBAC, custody ledger, upload pipeline, cryptographic integrity, API authorization.  
-**Verification Status:** 78 / 78 Backend Pytest Automated Tests Passing (100%), Clean Frontend Build & Lint.
+**Scope:** Full-stack architecture, source code audit, authentication, RBAC, custody ledger, upload pipeline, cryptographic integrity, API authorization, and multimodal verification.  
+**Verification Status:** 81 / 81 Backend Pytest Automated Tests Passing (100%), Clean Frontend Build & Lint.
 
 ---
 
@@ -155,14 +155,14 @@ All identified vulnerabilities were remediated using minimal, safe, backward-com
 
 ## 3. Automated Verification Results
 
-All defensive patches were subjected to automated verification using pytest:
+All defensive patches and completed endpoints were subjected to automated verification using pytest:
 
 ```
 ============================= test session starts =============================
 platform win32 -- Python 3.11.15, pytest-8.4.2, pluggy-1.7.0
 rootdir: C:\Users\rishi\OneDrive\Desktop\velo\backend
 configfile: pytest.ini
-collected 78 items
+collected 81 items
 
 backend\tests\test_auth.py ......................... PASSED
 backend\tests\test_database.py .. PASSED
@@ -180,8 +180,12 @@ backend\tests\test_security_audit.py ...... PASSED
   - test_audit_verification_order_rbac PASSED
   - test_global_audit_verification_requires_admin PASSED
   - test_production_secret_key_validation PASSED
+backend\tests\test_verification.py ... PASSED
+  - test_verification_status_endpoint PASSED
+  - test_run_verification_lifecycle PASSED
+  - test_verification_nonexistent_order_404 PASSED
 
-======================= 78 passed, 1 warning in 26.76s ========================
+======================= 81 passed, 1 warning in 36.82s ========================
 ```
 
 Frontend compilation audit:

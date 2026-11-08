@@ -26,8 +26,8 @@ The platform provides tamper-evident audit logging, Argon2id/JWT authentication,
 | **Disputes** | State Machine & Role Authorization | **PASS** | Finite transitions (`submitted` &rarr; `under_review` &rarr; `resolved`/`rejected`), seller/admin rules. |
 | **Reports** | ReportLab PDF Dossier Compiler | **PASS** | Two-pass `NumberedCanvas` pagination ("Page X of Y"), comprehensive tables and disclaimers. |
 | **Reports** | Authenticated Binary Streaming & Hash | **PASS** | Unique filename, SHA-256 calculation on generation, private storage streaming. |
-| **Integration** | Consolidated API Router | **PASS** | All routes mounted under `/api/v1` via `backend/app/routes/api_v1.py`. |
-| **Testing** | Automated Pytest Test Suite | **PASS** | **72/72 tests passing** (100% pass rate). |
+| **Integration** | Consolidated API Router | **PASS** | All routes mounted under `/api/v1` via `backend/app/routes/api_v1.py` including verification engine. |
+| **Testing** | Automated Pytest Test Suite | **PASS** | **81/81 tests passing** (100% pass rate). |
 
 ---
 
@@ -61,7 +61,9 @@ backend/tests/test_orders.py: 11 passed
 backend/tests/test_products.py: 8 passed
 backend/tests/test_relational_schema.py: 7 passed
 backend/tests/test_reports.py: 6 passed
-======================= 72 passed in 28.00s =======================
+backend/tests/test_security_audit.py: 6 passed
+backend/tests/test_verification.py: 3 passed
+======================= 81 passed in 36.82s =======================
 ```
 
 ---
