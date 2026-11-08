@@ -28,6 +28,13 @@ def register_user(db: Session, user_in: UserCreate) -> User:
     Register a new user in the system.
     Enforces email uniqueness, role constraints, and hashes the password with Argon2.
     """
+    # Prevent privilege escalation: Admin accounts cannot be self-registered publicly
+    if user_in.role == "admin" or (hasattr(user_in.role, "value") and user_in.role.value == "admin"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Public registration for administrator accounts is disabled. Contact system administrator.",
+        )
+
     normalized_email = user_in.email.lower().strip()
 
     # Verify email is not already registered

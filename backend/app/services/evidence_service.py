@@ -360,8 +360,22 @@ def upload_files_to_session(
     now_utc = datetime.now(timezone.utc)
 
     for upload_file in files:
-        # Read uploaded bytes
-        content = upload_file.file.read()
+        # Read uploaded bytes in bounded chunks to prevent memory exhaustion (DoS)
+        chunks = []
+        total_read = 0
+        chunk_size = 64 * 1024  # 64 KB
+        while True:
+            chunk = upload_file.file.read(chunk_size)
+            if not chunk:
+                break
+            total_read += len(chunk)
+            if total_read > settings.MAX_UPLOAD_SIZE_BYTES:
+                raise HTTPException(
+                    status_code=status.HTTP_413_CONTENT_TOO_LARGE,
+                    detail=f"File size exceeds the maximum allowed limit of {settings.MAX_UPLOAD_SIZE_BYTES} bytes.",
+                )
+            chunks.append(chunk)
+        content = b"".join(chunks)
         filename = os.path.basename(upload_file.filename or f"evidence_{uuid.uuid4().hex}")
 
         # Validate content & extension

@@ -54,6 +54,18 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24  # 24 hours
 
+    @field_validator("SECRET_KEY")
+    @classmethod
+    def validate_secret_key(cls, v: str, info) -> str:
+        env = info.data.get("ENVIRONMENT", "development")
+        if env == "production":
+            if "insecure" in v.lower() or len(v) < 32:
+                raise ValueError(
+                    "CRITICAL SECURITY CONFIGURATION ERROR: SECRET_KEY must be a cryptographically strong "
+                    "random secret of at least 32 characters in production environments."
+                )
+        return v
+
     # Logging
     LOG_LEVEL: str = "INFO"
 

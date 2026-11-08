@@ -13,13 +13,14 @@ export class ApiError extends Error {
   }
 }
 
-const TOKEN_KEY = "returnproof_access_token";
+const PRIMARY_TOKEN_KEY = "velo_access_token";
+const LEGACY_TOKEN_KEY = "returnproof_access_token";
 
 export const tokenStorage = {
   get: (): string | null => {
     if (typeof window === "undefined") return null;
     try {
-      return localStorage.getItem(TOKEN_KEY);
+      return localStorage.getItem(PRIMARY_TOKEN_KEY) || localStorage.getItem(LEGACY_TOKEN_KEY);
     } catch {
       return null;
     }
@@ -27,7 +28,8 @@ export const tokenStorage = {
   set: (token: string): void => {
     if (typeof window === "undefined") return;
     try {
-      localStorage.setItem(TOKEN_KEY, token);
+      localStorage.setItem(PRIMARY_TOKEN_KEY, token);
+      localStorage.setItem(LEGACY_TOKEN_KEY, token);
     } catch (e) {
       console.error("Failed to persist token to localStorage", e);
     }
@@ -35,7 +37,8 @@ export const tokenStorage = {
   clear: (): void => {
     if (typeof window === "undefined") return;
     try {
-      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(PRIMARY_TOKEN_KEY);
+      localStorage.removeItem(LEGACY_TOKEN_KEY);
     } catch (e) {
       console.error("Failed to clear token from localStorage", e);
     }

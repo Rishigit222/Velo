@@ -164,3 +164,4 @@ All primary user flows—including branding, authentication, RBAC, product catal
 > 4. Dispute workflows and automated ReportLab PDF custody dossiers generate and stream cleanly.
 > 5. All 72 backend unit/integration tests pass, and the Next.js frontend builds with zero TypeScript or linting errors.
 > 6. All user-facing branding has been unified to **Velo**.
+

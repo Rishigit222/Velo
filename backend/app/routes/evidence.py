@@ -2,11 +2,13 @@
 FastAPI endpoints for Evidence Capture, File Ingestion, and Chain-of-Custody Ledger.
 """
 from typing import List, Optional
-from fastapi import APIRouter, Depends, File, Query, UploadFile, status
+from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile, status
 from fastapi.responses import FileResponse
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from backend.app.database.connection import get_db
+from backend.app.models.order import Order
 from backend.app.models.user import User
 from backend.app.routes.deps import get_current_user
 from backend.app.schemas.evidence import (
@@ -19,8 +21,10 @@ from backend.app.schemas.evidence import (
     EvidenceSessionResponse,
     EvidenceSessionStatusUpdate,
 )
+from backend.app.schemas.user import UserRole
 from backend.app.services.audit_service import verify_audit_chain
 from backend.app.services.evidence_service import (
+    _validate_order_access,
     create_condition_report,
     create_evidence_session,
     download_evidence_file,
@@ -283,11 +287,26 @@ def get_condition_reports(
     "/audit/verify",
     response_model=AuditVerificationResponse,
     summary="Verify cryptographic audit log chain",
-    description="Recalculates SHA-256 hashes across the entire digital chain-of-custody ledger to detect tampering.",
+    description="Recalculates SHA-256 hashes across the digital chain-of-custody ledger. Enforces order party access controls.",
 )
 def verify_audit_log_chain(
     order_id: Optional[int] = Query(None, description="Optional order ID to verify order-scoped chain"),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ) -> AuditVerificationResponse:
+    if order_id is not None:
+        order = db.execute(select(Order).where(Order.id == order_id)).scalar_one_or_none()
+        if not order:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Order with ID {order_id} not found.",
+            )
+        _validate_order_access(order, current_user)
+    else:
+        # Global ledger verification is restricted to administrators to prevent cross-tenant information exposure
+        if current_user.role != UserRole.ADMIN.value:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Global audit chain verification requires administrator privileges. Provide an authorized order_id.",
+            )
     return verify_audit_chain(db=db, order_id=order_id)

@@ -4,8 +4,9 @@ ReturnProof Backend - Main FastAPI Application.
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from typing import AsyncGenerator
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from backend.app.core.config import settings
 from backend.app.database.connection import check_db_connection, init_db
@@ -25,7 +26,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     logger.info("Initializing database schema...")
     init_db()
     logger.info("Database schema initialized and ready.")
-    logger.info(f"Interactive API Docs available at /docs")
+    if settings.ENVIRONMENT != "production":
+        logger.info(f"Interactive API Docs available at /docs")
     yield
     # Shutdown actions
     logger.info(f"Shutting down {settings.PROJECT_NAME}...")
@@ -33,15 +35,44 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
 def create_application() -> FastAPI:
     """FastAPI application factory."""
+    is_prod = settings.ENVIRONMENT == "production"
+
     application = FastAPI(
         title=settings.PROJECT_NAME,
         version=settings.VERSION,
         description="Digital chain-of-custody platform for e-commerce delivery, unboxing and returns verification.",
-        docs_url="/docs",
-        redoc_url="/redoc",
-        openapi_url="/openapi.json",
+        docs_url=None if is_prod else "/docs",
+        redoc_url=None if is_prod else "/redoc",
+        openapi_url=None if is_prod else "/openapi.json",
         lifespan=lifespan,
     )
+
+    # Security Headers Middleware
+    @application.middleware("http")
+    async def add_security_headers(request: Request, call_next):
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-XSS-Protection"] = "1; mode=block"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        response.headers["Permissions-Policy"] = "camera=(self), microphone=(), geolocation=()"
+        if is_prod:
+            response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+        return response
+
+    # Global Exception Handler to prevent stack trace leakage
+    @application.exception_handler(Exception)
+    async def global_unhandled_exception_handler(request: Request, exc: Exception):
+        logger.error(f"Unhandled server error on {request.method} {request.url.path}: {exc}", exc_info=True)
+        if settings.DEBUG and not is_prod:
+            return JSONResponse(
+                status_code=500,
+                content={"detail": f"Internal Server Error: {str(exc)}"},
+            )
+        return JSONResponse(
+            status_code=500,
+            content={"detail": "An internal server error occurred. Please contact support."},
+        )
 
     # CORS configuration for Next.js frontend
     application.add_middleware(
@@ -67,7 +98,7 @@ def create_application() -> FastAPI:
             name=settings.PROJECT_NAME,
             version=settings.VERSION,
             status="online",
-            docs_url="/docs",
+            docs_url="/docs" if not is_prod else None,
         )
 
     # Global health check endpoint

@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
+from backend.app.core.rate_limiter import rate_limit_auth
 from backend.app.core.security import create_access_token
 from backend.app.database.connection import get_db
 from backend.app.models.user import User
@@ -21,7 +22,8 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
     response_model=UserResponse,
     status_code=status.HTTP_201_CREATED,
     summary="Register a new user",
-    description="Registers a new user (buyer, seller, or admin) with secure Argon2 password hashing.",
+    description="Registers a new user (buyer or seller) with secure Argon2 password hashing. Protected by rate limiting.",
+    dependencies=[Depends(rate_limit_auth)],
 )
 def register(
     user_in: UserCreate,
@@ -35,7 +37,8 @@ def register(
     "/login",
     response_model=TokenResponse,
     summary="User login (JSON)",
-    description="Authenticates user with JSON email and password, returning a JWT bearer token.",
+    description="Authenticates user with JSON email and password, returning a JWT bearer token. Protected by rate limiting.",
+    dependencies=[Depends(rate_limit_auth)],
 )
 def login(
     login_data: LoginRequest,
@@ -65,7 +68,8 @@ def login(
 @router.post(
     "/token",
     summary="OAuth2 Form Login (for Swagger UI)",
-    description="Form-data based login endpoint compatible with Swagger UI's Authorize dialog.",
+    description="Form-data based login endpoint compatible with Swagger UI's Authorize dialog. Protected by rate limiting.",
+    dependencies=[Depends(rate_limit_auth)],
 )
 def login_for_swagger_token(
     form_data: OAuth2PasswordRequestForm = Depends(),
