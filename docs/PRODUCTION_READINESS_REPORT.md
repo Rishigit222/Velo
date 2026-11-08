@@ -354,3 +354,4 @@ To ensure 99.9% service availability during production operations:
 >   4. Mount persistent storage for `/app/uploads`.
 >
 > **Awaiting User Approval:** As requested, no deployment commands, Azure resources, or database changes have been initiated. Review the report and approve the configuration phase when ready.
+
