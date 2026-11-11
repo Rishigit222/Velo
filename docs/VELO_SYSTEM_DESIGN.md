@@ -575,3 +575,4 @@ The following architectural enhancements are planned for post-pilot enterprise s
 - [ ] **Asynchronous Task Queue (Celery / RabbitMQ):** Offload computer vision image comparison and ReportLab PDF compilation to background Celery workers, notifying clients via WebSockets.
 - [ ] **Advanced Deep Learning Verification:** Augment Pillow RMS difference calculation with a fine-tuned Vision Transformer (ViT) or CLIP model to detect subtle serial number tampering and micro-scratches.
 - [ ] **PostgreSQL / Azure SQL Migration:** Execute Alembic migrations against managed cloud database instances with automated Point-in-Time Recovery (PITR).
+

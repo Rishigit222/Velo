@@ -761,3 +761,4 @@ SELECT id, event_type, previous_hash, current_hash FROM audit_logs ORDER BY id D
 1. Download **DB Browser for SQLite** (open-source).
 2. Open `returnproof.db`.
 3. Switch to **Browse Data** tab to view live rows across all 10 tables.
+

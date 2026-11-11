@@ -33,3 +33,8 @@ uploads/
 backend/uploads/*
 !backend/uploads/.gitkeep
 
+# Build and scratch artifacts
+scratch/
+deploy/azure/package/
+
+
