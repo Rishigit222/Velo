@@ -93,29 +93,25 @@ def compute_sha256(content: bytes) -> str:
     return hashlib.sha256(content).hexdigest()
 
 
-def save_evidence_file(content: bytes, ext: str, upload_base_dir: Optional[str] = None) -> str:
+def save_evidence_file(
+    content: bytes,
+    ext: str,
+    upload_base_dir: Optional[str] = None,
+    mime_type: str = "application/octet-stream",
+) -> str:
     """
-    Save uploaded file to private local storage with a random collision-free filename.
+    Save uploaded file to private storage (Supabase Storage if configured; otherwise local disk).
     Guarantees no path traversal and protects storage paths.
     """
-    base_dir = Path(upload_base_dir or settings.UPLOAD_DIR) / "evidence"
-    base_dir.mkdir(parents=True, exist_ok=True)
+    from backend.app.services.storage_service import storage_service
 
-    unique_filename = f"{uuid.uuid4().hex}_{int(time.time())}{ext}"
-    target_path = (base_dir / unique_filename).resolve()
-
-    # Verify no path traversal outside designated upload directory
-    if not target_path.is_relative_to(base_dir.resolve()):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Illegal file storage path attempt detected.",
-        )
-
-    with open(target_path, "wb") as f:
-        f.write(content)
-
-    # Return internal relative path
-    return str(target_path)
+    return storage_service.save_file(
+        content=content,
+        ext=ext,
+        mime_type=mime_type,
+        subfolder="evidence",
+        upload_base_dir=upload_base_dir,
+    )
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -385,8 +381,8 @@ def upload_files_to_session(
         file_hash = compute_sha256(content)
         file_size = len(content)
 
-        # Save to private local storage
-        saved_path = save_evidence_file(content, ext)
+        # Save to private storage (Supabase or local)
+        saved_path = save_evidence_file(content, ext, mime_type=detected_mime)
 
         evidence_file = EvidenceFile(
             session_id=session.id,
@@ -476,10 +472,10 @@ def download_evidence_file(
     """
     evidence_file = get_evidence_file_for_user(db, file_id, current_user)
 
-    if not os.path.exists(evidence_file.file_path):
+    if not evidence_file.file_path.startswith("supabase://") and not os.path.exists(evidence_file.file_path):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Evidence media payload is not present in local storage repository.",
+            detail="Evidence media payload is not present in storage repository.",
         )
 
     # Record audit log event for authorized download

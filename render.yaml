@@ -1,0 +1,36 @@
+# Render Infrastructure as Code Blueprint for Velo FastAPI Backend
+services:
+  - type: web
+    name: velo-api
+    runtime: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT --workers 2
+    plan: free
+    region: oregon
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.10
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: "False"
+      - key: PROJECT_NAME
+        value: "Velo API"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: BACKEND_CORS_ORIGINS
+        value: '["https://velo.vercel.app","https://*.vercel.app"]'
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: SUPABASE_STORAGE_BUCKET
+        value: evidence
+      - key: UPLOAD_DIR
+        value: uploads
+      - key: LOG_LEVEL
+        value: INFO
+

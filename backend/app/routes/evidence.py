@@ -3,7 +3,7 @@ FastAPI endpoints for Evidence Capture, File Ingestion, and Chain-of-Custody Led
 """
 from typing import List, Optional
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile, status
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -227,6 +227,17 @@ def download_file(
         file_id=file_id,
         current_user=current_user,
     )
+
+    if physical_path.startswith("supabase://"):
+        from backend.app.services.storage_service import storage_service
+
+        file_bytes = storage_service.get_file_bytes(physical_path)
+        return Response(
+            content=file_bytes,
+            media_type=file_type,
+            headers={"Content-Disposition": f'attachment; filename="{file_name}"'},
+        )
+
     return FileResponse(
         path=physical_path,
         media_type=file_type,

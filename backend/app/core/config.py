@@ -1,5 +1,5 @@
 import json
-from typing import List, Union
+from typing import List, Optional, Union
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -46,8 +46,15 @@ class Settings(BaseSettings):
         return ["http://localhost:3000", "http://127.0.0.1:3000"]
 
     # Database Configuration
-    # Defaults to local SQLite file database. Compatible with Azure SQL Database via standard connection strings.
+    # Defaults to local SQLite file database. Compatible with Supabase PostgreSQL and Azure SQL via standard connection strings.
     DATABASE_URL: str = "sqlite:///./returnproof.db"
+
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def assemble_database_url(cls, v: str) -> str:
+        if isinstance(v, str) and v.startswith("postgres://"):
+            return v.replace("postgres://", "postgresql://", 1)
+        return v
 
     # JWT Authentication & Security
     SECRET_KEY: str = "returnproof-jwt-insecure-secret-key-change-in-production-only"
@@ -80,6 +87,11 @@ class Settings(BaseSettings):
         "video/mp4",
         "video/webm",
     ]
+
+    # Supabase Private Storage Configuration (Optional - falls back to local disk if omitted)
+    SUPABASE_URL: Optional[str] = None
+    SUPABASE_KEY: Optional[str] = None
+    SUPABASE_STORAGE_BUCKET: str = "evidence"
 
 
 settings = Settings()

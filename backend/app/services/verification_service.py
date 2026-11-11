@@ -3,6 +3,7 @@ Automated Verification Service for visual comparison and discrepancy detection.
 Compares delivery and return evidence media, evaluates condition reports, and records audit logs.
 """
 from datetime import datetime, timezone
+import io
 import os
 from typing import List, Optional, Tuple
 from fastapi import HTTPException, status
@@ -22,16 +23,34 @@ from backend.app.services.audit_service import AuditEventType, record_audit_even
 from backend.app.services.evidence_service import _validate_order_access
 
 
+def _load_image(path_or_uri: str) -> Optional[Image.Image]:
+    """Load image from Supabase Storage URI or local filesystem path."""
+    try:
+        if path_or_uri.startswith("supabase://"):
+            from backend.app.services.storage_service import storage_service
+
+            data = storage_service.get_file_bytes(path_or_uri)
+            return Image.open(io.BytesIO(data))
+        if os.path.exists(path_or_uri):
+            return Image.open(path_or_uri)
+        return None
+    except Exception:
+        return None
+
+
 def compute_image_difference(img_path1: str, img_path2: str) -> Optional[float]:
     """
     Compute normalized Root Mean Square (RMS) difference between two images.
     Returns float in range [0.0, 1.0], or None if either file cannot be processed.
+    Supports both local filesystem paths and Supabase Storage URIs.
     """
     try:
-        if not (os.path.exists(img_path1) and os.path.exists(img_path2)):
+        img1 = _load_image(img_path1)
+        img2 = _load_image(img_path2)
+        if img1 is None or img2 is None:
             return None
 
-        with Image.open(img_path1) as img1, Image.open(img_path2) as img2:
+        with img1, img2:
             # Normalize to 256x256 RGB
             norm1 = img1.convert("RGB").resize((256, 256))
             norm2 = img2.convert("RGB").resize((256, 256))
